@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 
 import com.carlitos.Pronacej.R;
 import com.github.mikephil.charting.charts.HorizontalBarChart;
@@ -79,22 +80,22 @@ public class ResultadoReporteDiarioCJdr extends AppCompatActivity {
         }
 
         ArrayList<Integer> colors = new ArrayList<>();
-        colors.add(getResources().getColor(R.color.Pronacej1));
-        colors.add(getResources().getColor(R.color.Pronacej2));
-        colors.add(getResources().getColor(R.color.Pronacej3));
-        colors.add(getResources().getColor(R.color.Pronacej4));
-        colors.add(getResources().getColor(R.color.Pronacej5));
-        colors.add(getResources().getColor(R.color.Pronacej6));
-        colors.add(getResources().getColor(R.color.Pronacej7));
-        colors.add(getResources().getColor(R.color.Pronacej8));
-        colors.add(getResources().getColor(R.color.Pronacej9));
-        colors.add(getResources().getColor(R.color.Pronacej10));
+        colors.add(ContextCompat.getColor(this, R.color.Pronacej1));
+        colors.add(ContextCompat.getColor(this, R.color.Pronacej2));
+        colors.add(ContextCompat.getColor(this, R.color.Pronacej3));
+        colors.add(ContextCompat.getColor(this, R.color.Pronacej4));
+        colors.add(ContextCompat.getColor(this, R.color.Pronacej5));
+        colors.add(ContextCompat.getColor(this, R.color.Pronacej6));
+        colors.add(ContextCompat.getColor(this, R.color.Pronacej7));
+        colors.add(ContextCompat.getColor(this, R.color.Pronacej8));
+        colors.add(ContextCompat.getColor(this, R.color.Pronacej9));
+        colors.add(ContextCompat.getColor(this, R.color.Pronacej10));
 
         // Crear el conjunto de datos para el gráfico de barras
         BarDataSet dataSet = new BarDataSet(entries, "Población por Centro Juvenil");
         dataSet.setColors(colors);
-        dataSet.setValueTextSize(12f);
-        dataSet.setValueTextColor(R.color.black);
+        dataSet.setValueTextSize(16f); // Tamaño de texto más grande
+        dataSet.setValueTextColor(ContextCompat.getColor(this, R.color.black)); // Color de texto negro
 
         // Crear los datos del gráfico de barras
         BarData barData = new BarData(dataSet);
@@ -106,18 +107,26 @@ public class ResultadoReporteDiarioCJdr extends AppCompatActivity {
         // Configurar descripción del gráfico
         barChart.getDescription().setEnabled(false);
 
+
+
         // Configurar el eje X
         barChart.getXAxis().setValueFormatter(new ValueFormatter() {
             @Override
             public String getFormattedValue(float value) {
-                return reportData.get((int) value).get("centro_cjdr");
+                return reportData.get((int) value).get("poblacion_cjdr");
             }
         });
         barChart.getXAxis().setGranularity(1f);
         barChart.getXAxis().setGranularityEnabled(true);
 
-
-
+        // Crear y establecer el formateador de valores personalizado
+        ValueFormatter valueFormatter = new ValueFormatter() {
+            @Override
+            public String getBarLabel(BarEntry barEntry) {
+                return String.valueOf((int) barEntry.getY());
+            }
+        };
+        barData.setValueFormatter(valueFormatter);
 
         // Establecer los datos en el gráfico y refrescar
         barChart.setData(barData);
