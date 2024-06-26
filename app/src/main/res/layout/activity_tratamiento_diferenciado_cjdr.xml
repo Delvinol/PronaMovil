@@ -146,7 +146,7 @@
                     android:id="@+id/Opcion2"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    android:layout_marginEnd="12dp"
+                    android:layout_marginEnd="0dp"
                     android:layout_weight="0.5"
                     android:background="@drawable/btn_background_oficial_3">
 
@@ -177,7 +177,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="8dp"
                         android:gravity="center"
-                        android:text="Justicia \n terapeutica"
+                        android:text="Estrategias para consumidores\n de drogas"
                         android:textColor="@color/white"
                         android:textSize="18sp"
                         android:textStyle="bold"
@@ -186,11 +186,21 @@
                         app:layout_constraintTop_toBottomOf="@+id/imageView06" />
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginStart="24dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="24dp"
+                android:orientation="horizontal">
+
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/Opcion3"
                     android:layout_width="0dp"
                     android:layout_height="170dp"
-                    android:layout_marginStart="12dp"
+                    android:layout_marginStart="0dp"
                     android:layout_weight="0.5"
                     android:background="@drawable/btn_background_oficial_5">
 
@@ -227,6 +237,96 @@
                         app:layout_constraintEnd_toEndOf="@+id/imageView08"
                         app:layout_constraintStart_toStartOf="@+id/imageView08"
                         app:layout_constraintTop_toBottomOf="@+id/imageView08" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/Opcion6"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginEnd="12dp"
+                    android:layout_weight="0.5"
+                    android:background="@drawable/btn_background_oficial_6"
+                    android:visibility="gone">
+
+                    <ImageView
+                        android:id="@+id/imageView13"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:srcCompat="@drawable/light_3" />
+
+                    <ImageView
+                        android:id="@+id/imageView14"
+                        android:layout_width="80dp"
+                        android:layout_height="80dp"
+                        android:tint="@color/white"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintVertical_bias="0.3"
+                        app:srcCompat="@drawable/baseline_health_and_safety_24"
+                        tools:ignore="UseAppTint" />
+
+                    <TextView
+                        android:id="@+id/textView07"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:gravity="center"
+                        android:text="Intervención \nterapéutica"
+                        android:textColor="@color/white"
+                        android:textSize="18sp"
+                        android:textStyle="bold"
+                        app:layout_constraintEnd_toEndOf="@+id/imageView14"
+                        app:layout_constraintStart_toStartOf="@+id/imageView14"
+                        app:layout_constraintTop_toBottomOf="@+id/imageView14" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/Opcion7"
+                    android:layout_width="0dp"
+                    android:layout_height="170dp"
+                    android:layout_marginStart="12dp"
+                    android:layout_weight="0.5"
+                    android:background="@drawable/btn_background_oficial_3"
+                    android:visibility="gone">
+
+                    <ImageView
+                        android:id="@+id/imageView15"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:srcCompat="@drawable/light_4" />
+
+                    <ImageView
+                        android:id="@+id/imageView16"
+                        android:layout_width="80dp"
+                        android:layout_height="80dp"
+                        android:tint="@color/white"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintVertical_bias="0.3"
+                        app:srcCompat="@drawable/baseline_person_outline_24"
+                        tools:ignore="UseAppTint" />
+
+                    <TextView
+                        android:id="@+id/textView08"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="16dp"
+                        android:gravity="center"
+                        android:text="Firmes \ny adelante"
+                        android:textColor="@color/white"
+                        android:textSize="18sp"
+                        android:textStyle="bold"
+                        app:layout_constraintEnd_toEndOf="@+id/imageView16"
+                        app:layout_constraintStart_toStartOf="@+id/imageView16"
+                        app:layout_constraintTop_toBottomOf="@+id/imageView16" />
                 </androidx.constraintlayout.widget.ConstraintLayout>
             </LinearLayout>
 
@@ -317,7 +417,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="8dp"
                         android:gravity="center"
-                        android:text="Adn familiar (SOA) \nfamilia joven (cjdr)"
+                        android:text="Familia joven"
                         android:textColor="@color/white"
                         android:textSize="18sp"
                         android:textStyle="bold"
@@ -325,104 +425,6 @@
                         app:layout_constraintStart_toStartOf="@+id/imageView12"
                         app:layout_constraintTop_toBottomOf="@+id/imageView12"
                         tools:gravity="center" />
-                </androidx.constraintlayout.widget.ConstraintLayout>
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginStart="24dp"
-                android:layout_marginTop="16dp"
-                android:layout_marginEnd="24dp"
-                android:orientation="horizontal">
-
-                <androidx.constraintlayout.widget.ConstraintLayout
-                    android:id="@+id/Opcion6"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_marginEnd="12dp"
-                    android:layout_weight="0.5"
-                    android:background="@drawable/btn_background_oficial_6">
-
-                    <ImageView
-                        android:id="@+id/imageView13"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:srcCompat="@drawable/light_3" />
-
-                    <ImageView
-                        android:id="@+id/imageView14"
-                        android:layout_width="80dp"
-                        android:layout_height="80dp"
-                        android:tint="@color/white"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintVertical_bias="0.3"
-                        app:srcCompat="@drawable/baseline_health_and_safety_24"
-                        tools:ignore="UseAppTint" />
-
-                    <TextView
-                        android:id="@+id/textView07"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="8dp"
-                        android:gravity="center"
-                        android:text="Intervención \nterapéutica"
-                        android:textColor="@color/white"
-                        android:textSize="18sp"
-                        android:textStyle="bold"
-                        app:layout_constraintEnd_toEndOf="@+id/imageView14"
-                        app:layout_constraintStart_toStartOf="@+id/imageView14"
-                        app:layout_constraintTop_toBottomOf="@+id/imageView14" />
-                </androidx.constraintlayout.widget.ConstraintLayout>
-
-                <androidx.constraintlayout.widget.ConstraintLayout
-                    android:id="@+id/Opcion7"
-                    android:layout_width="0dp"
-                    android:layout_height="170dp"
-                    android:layout_marginStart="12dp"
-                    android:layout_weight="0.5"
-                    android:background="@drawable/btn_background_oficial_3"
-                    android:visibility="visible">
-
-                    <ImageView
-                        android:id="@+id/imageView15"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:srcCompat="@drawable/light_4" />
-
-                    <ImageView
-                        android:id="@+id/imageView16"
-                        android:layout_width="80dp"
-                        android:layout_height="80dp"
-                        android:tint="@color/white"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintVertical_bias="0.3"
-                        app:srcCompat="@drawable/baseline_person_outline_24"
-                        tools:ignore="UseAppTint" />
-
-                    <TextView
-                        android:id="@+id/textView08"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="16dp"
-                        android:gravity="center"
-                        android:text="Firmes \ny adelante"
-                        android:textColor="@color/white"
-                        android:textSize="18sp"
-                        android:textStyle="bold"
-                        app:layout_constraintEnd_toEndOf="@+id/imageView16"
-                        app:layout_constraintStart_toStartOf="@+id/imageView16"
-                        app:layout_constraintTop_toBottomOf="@+id/imageView16" />
                 </androidx.constraintlayout.widget.ConstraintLayout>
             </LinearLayout>
 

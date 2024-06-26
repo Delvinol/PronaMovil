@@ -99,7 +99,8 @@
                     android:layout_height="match_parent"
                     android:layout_marginStart="24dp"
                     android:layout_weight="0.5"
-                    android:background="@drawable/btn_background_oficial_3">
+                    android:background="@drawable/btn_background_oficial_3"
+                    android:visibility="gone">
 
                     <ImageView
                         android:id="@+id/imageView60"

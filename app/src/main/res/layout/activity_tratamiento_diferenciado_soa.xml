@@ -177,7 +177,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="8dp"
                         android:gravity="center"
-                        android:text="Justicia \n terapeutica"
+                        android:text=" Justicia\n terapéutica"
                         android:textColor="@color/white"
                         android:textSize="18sp"
                         android:textStyle="bold"
@@ -244,7 +244,8 @@
                     android:layout_height="match_parent"
                     android:layout_marginEnd="12dp"
                     android:layout_weight="0.5"
-                    android:background="@drawable/btn_background_oficial_6">
+                    android:background="@drawable/btn_background_oficial_6"
+                    android:visibility="gone">
 
                     <ImageView
                         android:id="@+id/imageView09"
@@ -286,7 +287,7 @@
                     android:id="@+id/Opcion5"
                     android:layout_width="0dp"
                     android:layout_height="170dp"
-                    android:layout_marginStart="12dp"
+                    android:layout_marginStart="0dp"
                     android:layout_weight="0.5"
                     android:background="@drawable/btn_background_1">
 
@@ -317,7 +318,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="8dp"
                         android:gravity="center"
-                        android:text="Adn familiar (SOA) \nfamilia joven (cjdr)"
+                        android:text="Adn familiar"
                         android:textColor="@color/white"
                         android:textSize="18sp"
                         android:textStyle="bold"
