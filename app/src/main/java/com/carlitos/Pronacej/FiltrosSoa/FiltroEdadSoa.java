@@ -15,10 +15,10 @@ import android.widget.TextView;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.carlitos.Pronacej.ActivitysPadres.CategoriaMenu;
 import com.carlitos.Pronacej.R;
-import com.carlitos.Pronacej.ResultadosCjrd.ResultadoEdadCjdr;
+import com.carlitos.Pronacej.ResultadosSoa.ResultadoEdadSoa;
 import com.carlitos.Pronacej.Utils.Apis;
-import com.carlitos.Pronacej.Utils.CjdrService;
 import com.carlitos.Pronacej.Utils.SoaService;
 
 import org.json.JSONArray;
@@ -50,6 +50,24 @@ public class FiltroEdadSoa extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.filtro_poblacion_soa);
 
+        Button ButtonBack = findViewById(R.id.buttonBack);
+        Button ButtonHome = findViewById(R.id.buttonHome);
+
+        ButtonHome.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intentHome = new Intent(FiltroEdadSoa.this, CategoriaMenu.class);
+                startActivity(intentHome);
+            }
+
+        });
+        ButtonBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onBackPressed(); // Llamar al método onBackPressed para ir atrás
+            }
+        });
+
         initDatePicker();
         dateButton = findViewById(R.id.etFechaInicio);
         selectedDate = getTodaysDate();
@@ -77,6 +95,8 @@ public class FiltroEdadSoa extends AppCompatActivity {
             }
         });
         setupCheckBoxListeners();
+
+
 
     }
 
@@ -115,7 +135,7 @@ public class FiltroEdadSoa extends AppCompatActivity {
                     String datosJson = jsonArray.toString();
 
                     // Crear el Intent y añadir los extras
-                    Intent intent = new Intent(FiltroEdadSoa.this, ResultadoEdadCjdr.class);
+                    Intent intent = new Intent(FiltroEdadSoa.this, ResultadoEdadSoa.class);
                     intent.putExtra("datosEdad", datosJson);
 
                     // Iniciar la actividad ResultadoEdadSoa
@@ -198,6 +218,10 @@ public class FiltroEdadSoa extends AppCompatActivity {
     public void openDatePicker(View view) {
         datePickerDialog.show();
     }
+    public void openDatePickerInicio(View view) {
+        datePickerDialog.show();
+    }
+
 
     public String showSelectedDate(View view) {
         String[] dateParts = selectedDate.split(" ");

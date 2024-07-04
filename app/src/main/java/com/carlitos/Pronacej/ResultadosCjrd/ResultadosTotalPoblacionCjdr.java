@@ -1,11 +1,16 @@
 package com.carlitos.Pronacej.ResultadosCjrd;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.carlitos.Pronacej.ActivitysPadres.CategoriaMenu;
+import com.carlitos.Pronacej.OpcionesSoa.PoblacionSoaActivity;
 import com.carlitos.Pronacej.R;
 import com.github.mikephil.charting.charts.BarChart;
 import com.github.mikephil.charting.components.Legend;
@@ -25,6 +30,24 @@ public class ResultadosTotalPoblacionCjdr extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.resultado_total_cjdr);
+
+        Button ButtonBack = findViewById(R.id.buttonBack);
+        Button ButtonHome = findViewById(R.id.buttonHome);
+
+        ButtonHome.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intentHome = new Intent(ResultadosTotalPoblacionCjdr.this, CategoriaMenu.class);
+                startActivity(intentHome);
+            }
+
+        });
+        ButtonBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onBackPressed(); // Llamar al método onBackPressed para ir atrás
+            }
+        });
 
         BarChart barChart = findViewById(R.id.barChart);
 

@@ -1,6 +1,7 @@
 package com.carlitos.Pronacej.ActivitysPadres;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -67,6 +68,13 @@ public class LoginActivity extends AppCompatActivity {
                     AuthResponse loginResponse = response.body();
                     // Manejar la respuesta de inicio de sesión exitoso
                     Toast.makeText(LoginActivity.this, "Inicio de sesión exitoso", Toast.LENGTH_SHORT).show();
+
+                    // Almacenar el nombre del usuario en SharedPreferences
+                    SharedPreferences sharedPreferences = getSharedPreferences("UserPrefs", MODE_PRIVATE);
+                    SharedPreferences.Editor editor = sharedPreferences.edit();
+                    editor.putString("userName", loginResponse.getName());
+                    editor.apply();
+
                     // Redirigir a la siguiente actividad (por ejemplo, al menú principal)
                     Intent intent = new Intent(LoginActivity.this, CategoriaMenu.class);
                     startActivity(intent);
@@ -76,6 +84,7 @@ public class LoginActivity extends AppCompatActivity {
                     Toast.makeText(LoginActivity.this, "Error al iniciar sesión", Toast.LENGTH_SHORT).show();
                 }
             }
+
 
             @Override
             public void onFailure(Call<AuthResponse> call, Throwable t) {

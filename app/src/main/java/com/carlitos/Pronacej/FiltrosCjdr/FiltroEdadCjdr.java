@@ -15,12 +15,11 @@ import android.widget.TextView;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.carlitos.Pronacej.OpcionesCjdr.PoblacionCjdrActivity;
+import com.carlitos.Pronacej.ActivitysPadres.CategoriaMenu;
 import com.carlitos.Pronacej.R;
 import com.carlitos.Pronacej.ResultadosCjrd.ResultadoEdadCjdr;
 import com.carlitos.Pronacej.Utils.Apis;
 import com.carlitos.Pronacej.Utils.CjdrService;
-import com.google.gson.Gson;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -50,6 +49,24 @@ public class FiltroEdadCjdr extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.filtro_poblacion_cjdr);
+
+        Button ButtonBack = findViewById(R.id.buttonBack);
+        Button ButtonHome = findViewById(R.id.buttonHome);
+
+        ButtonHome.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intentHome = new Intent(FiltroEdadCjdr.this, CategoriaMenu.class);
+                startActivity(intentHome);
+            }
+
+        });
+        ButtonBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onBackPressed(); // Llamar al método onBackPressed para ir atrás
+            }
+        });
 
         initDatePicker();
         dateButton = findViewById(R.id.etFechaInicio);
@@ -199,6 +216,10 @@ public class FiltroEdadCjdr extends AppCompatActivity {
     public void openDatePicker(View view) {
         datePickerDialog.show();
     }
+    public void openDatePickerInicio(View view) {
+        datePickerDialog.show();
+    }
+
 
     public String showSelectedDate(View view) {
         String[] dateParts = selectedDate.split(" ");

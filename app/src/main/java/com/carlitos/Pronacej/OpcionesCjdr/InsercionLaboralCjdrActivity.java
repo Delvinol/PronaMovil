@@ -9,10 +9,7 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 
 import com.carlitos.Pronacej.R;
 import com.carlitos.Pronacej.ResultadosCjrd.ResultadosSeguroMedicoCjdr;
-import com.carlitos.Pronacej.ResultadosCjrd.ResultadosSituacionJuridicaCjdr;
 import com.carlitos.Pronacej.ResultadosCjrd.ResultadosSituacionLaboralActualCjdr;
-import com.carlitos.Pronacej.ResultadosSoa.ResultadosSeguroMedicoSoa;
-import com.carlitos.Pronacej.ResultadosSoa.ResultadosSituacionLaboralActualSoa;
 
 public class InsercionLaboralCjdrActivity extends AppCompatActivity {
 
@@ -20,9 +17,8 @@ public class InsercionLaboralCjdrActivity extends AppCompatActivity {
     private int seguro_essalud;
     private int seguro_particular;
     private int seguro_ninguno;
-    private int inser_labo_interna;
-    private int inser_labo_externa;
-    private int no_trabaja;
+    private int trabaja_si;
+    private int trabaja_no;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,9 +30,8 @@ public class InsercionLaboralCjdrActivity extends AppCompatActivity {
         seguro_essalud = intent.getIntExtra("seguro_essalud", 0);
         seguro_particular = intent.getIntExtra("seguro_particular", 0);
         seguro_ninguno = intent.getIntExtra("seguro_ninguno", 0);
-        inser_labo_interna = intent.getIntExtra("inser_labo_interna", 0);
-        inser_labo_externa = intent.getIntExtra("inser_labo_externa", 0);
-        no_trabaja = intent.getIntExtra("no_trabaja", 0);
+        trabaja_si = intent.getIntExtra("trabaja_si", 0);
+        trabaja_no = intent.getIntExtra("trabaja_no", 0);
         // Asignar click listener a los ConstraintLayouts
         ConstraintLayout opcion1 = findViewById(R.id.Opcion1);
         ConstraintLayout opcion2 = findViewById(R.id.Opcion2);
@@ -46,9 +41,8 @@ public class InsercionLaboralCjdrActivity extends AppCompatActivity {
             public void onClick(View v) {
                 // Iniciar la actividad correspondiente al presionar el ConstraintLayout 1
                 Intent intentOpcion1 = new Intent(InsercionLaboralCjdrActivity.this, ResultadosSituacionLaboralActualCjdr.class);
-                intentOpcion1.putExtra("inser_labo_interna", inser_labo_interna);
-                intentOpcion1.putExtra("inser_labo_externa", inser_labo_externa);
-                intentOpcion1.putExtra("no_trabaja", no_trabaja);
+                intentOpcion1.putExtra("trabaja_si", trabaja_si);
+                intentOpcion1.putExtra("trabaja_no", trabaja_no);
                 startActivity(intentOpcion1);
             }
         });

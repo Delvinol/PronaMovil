@@ -3,10 +3,12 @@ package com.carlitos.Pronacej.OpcionesCjdr;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
+import com.carlitos.Pronacej.ActivitysPadres.CategoriaMenu;
 import com.carlitos.Pronacej.R;
 import com.carlitos.Pronacej.ResultadosCjrd.ResultadoCentroEducativoCjdr;
 import com.carlitos.Pronacej.ResultadosCjrd.ResultadoReinsercionEducativaCjdr;
@@ -54,6 +56,23 @@ public class InsercionEducativaCjdrActivity extends AppCompatActivity {
         ConstraintLayout opcion1 = findViewById(R.id.Opcion1);
         ConstraintLayout opcion2 = findViewById(R.id.Opcion2);
         ConstraintLayout opcion3 = findViewById(R.id.Opcion3);
+        Button ButtonBack = findViewById(R.id.buttonBack);
+        Button ButtonHome = findViewById(R.id.buttonHome);
+
+        ButtonHome.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intentHome = new Intent(InsercionEducativaCjdrActivity.this, CategoriaMenu.class);
+                startActivity(intentHome);
+            }
+
+        });
+        ButtonBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onBackPressed(); // Llamar al método onBackPressed para ir atrás
+            }
+        });
 
         opcion1.setOnClickListener(new View.OnClickListener() {
             @Override

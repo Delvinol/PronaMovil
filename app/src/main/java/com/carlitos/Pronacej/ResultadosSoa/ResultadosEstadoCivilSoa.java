@@ -2,10 +2,14 @@ package com.carlitos.Pronacej.ResultadosSoa;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.carlitos.Pronacej.ActivitysPadres.CategoriaMenu;
+import com.carlitos.Pronacej.OpcionesSoa.PoblacionSoaActivity;
 import com.carlitos.Pronacej.R;
 import com.github.mikephil.charting.charts.PieChart;
 import com.github.mikephil.charting.data.PieData;
@@ -28,6 +32,24 @@ public class ResultadosEstadoCivilSoa extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.resultado_estado_civil_soa);
+
+        Button ButtonBack = findViewById(R.id.buttonBack);
+        Button ButtonHome = findViewById(R.id.buttonHome);
+
+        ButtonHome.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intentHome = new Intent(ResultadosEstadoCivilSoa.this, CategoriaMenu.class);
+                startActivity(intentHome);
+            }
+
+        });
+        ButtonBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onBackPressed(); // Llamar al método onBackPressed para ir atrás
+            }
+        });
 
         // Obtener los valores de estado civil desde el intent
         Intent intent = getIntent();

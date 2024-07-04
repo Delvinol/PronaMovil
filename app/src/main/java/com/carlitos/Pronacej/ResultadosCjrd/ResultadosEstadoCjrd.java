@@ -3,13 +3,18 @@ package com.carlitos.Pronacej.ResultadosCjrd;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 
+import com.carlitos.Pronacej.ActivitysPadres.CategoriaMenu;
 import com.carlitos.Pronacej.R;
 import com.github.mikephil.charting.charts.HorizontalBarChart;
+import com.github.mikephil.charting.components.XAxis;
+import com.github.mikephil.charting.components.YAxis;
 import com.github.mikephil.charting.data.BarData;
 import com.github.mikephil.charting.data.BarDataSet;
 import com.github.mikephil.charting.data.BarEntry;
@@ -29,6 +34,24 @@ public class ResultadosEstadoCjrd extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.resultado_estado_cjdr);
+
+        Button ButtonBack = findViewById(R.id.buttonBack);
+        Button ButtonHome = findViewById(R.id.buttonHome);
+
+        ButtonHome.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intentHome = new Intent(ResultadosEstadoCjrd.this, CategoriaMenu.class);
+                startActivity(intentHome);
+            }
+        });
+
+        ButtonBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onBackPressed(); // Llamar al método onBackPressed para ir atrás
+            }
+        });
 
         barChart = findViewById(R.id.barChart);
 
@@ -93,17 +116,11 @@ public class ResultadosEstadoCjrd extends AppCompatActivity {
             float total = ingresos + egresos;
 
             // Evitar NaN y Infinity
-            float porcentajeEgresos = totalEgresos == 0 ? 0 : (egresos / totalEgresos) * 100;
-            float porcentajeIngresos = totalIngresos == 0 ? 0 : (ingresos / totalIngresos) * 100;
+            float porcentajeEgresos = total == 0 ? 0 : (egresos / total) * 100;
+            float porcentajeIngresos = total == 0 ? 0 : (ingresos / total) * 100;
 
-            Log.d("ResultadosEstadoCjrd", "Centro: " + data.get("centro_cjdr") +
-                    ", Egresos: " + egresos +
-                    ", Ingresos: " + ingresos +
-                    ", Porcentaje Egresos: " + porcentajeEgresos +
-                    ", Porcentaje Ingresos: " + porcentajeIngresos);
-
-            entries.add(new BarEntry(i, new float[]{ingresos, egresos}));
-            textViewsPorcentaje[i].setText(String.format("Egresos: %.2f%%, Ingresos: %.2f%%", porcentajeEgresos, porcentajeIngresos));
+            entries.add(new BarEntry(i, new float[]{porcentajeIngresos, porcentajeEgresos}));
+            textViewsPorcentaje[i].setText(String.format("Egresos: %.0f, \n Ingresos: %.0f", egresos, ingresos));
             textViewsNombre[i].setText(data.get("centro_cjdr"));
         }
 
@@ -112,11 +129,19 @@ public class ResultadosEstadoCjrd extends AppCompatActivity {
         colors.add(ContextCompat.getColor(this, R.color.Pronacej1));
 
         // Crear el conjunto de datos para el gráfico de barras
-        BarDataSet dataSet = new BarDataSet(entries, "Centro Juvenil");
+        BarDataSet dataSet = new BarDataSet(entries, "");
         dataSet.setColors(colors);
         dataSet.setValueTextSize(12f);
         dataSet.setValueTextColor(ContextCompat.getColor(this, R.color.black));
         dataSet.setStackLabels(new String[]{"Ingresos", "Egresos"});
+
+        // Asigna el ValueFormatter al dataSet para mostrar porcentajes
+        dataSet.setValueFormatter(new ValueFormatter() {
+            @Override
+            public String getFormattedValue(float value) {
+                return String.format("%.1f%%", value); // Mostrar porcentajes en las barras
+            }
+        });
 
         // Crear los datos del gráfico de barras
         BarData barData = new BarData(dataSet);
@@ -128,19 +153,30 @@ public class ResultadosEstadoCjrd extends AppCompatActivity {
         // Configurar descripción del gráfico
         barChart.getDescription().setEnabled(false);
 
+        // Añadir margen adicional a la izquierda y derecha del gráfico
+        barChart.setExtraLeftOffset(10f); // Ajusta el valor según sea necesario
+        barChart.setExtraRightOffset(50f); // Añadir margen derecho
+
         // Configurar el eje X
-        barChart.getXAxis().setValueFormatter(new ValueFormatter() {
+        XAxis xAxis = barChart.getXAxis();
+        xAxis.setValueFormatter(new ValueFormatter() {
             @Override
             public String getFormattedValue(float value) {
                 return reportData.get((int) value).get("centro_cjdr");
             }
         });
-        barChart.getXAxis().setGranularity(1f);
-        barChart.getXAxis().setGranularityEnabled(true);
+        xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
+        xAxis.setGranularity(1f);
+        xAxis.setGranularityEnabled(true);
+        xAxis.setLabelCount(reportData.size());
+        xAxis.setLabelRotationAngle(0);  // Cambia el ángulo de rotación a 0 para que las etiquetas estén en horizontal
 
-        // Configurar el eje Y
-        barChart.getAxisLeft().setGranularity(1f);
-        barChart.getAxisRight().setEnabled(false);
+        YAxis yAxisLeft = barChart.getAxisLeft();
+        yAxisLeft.setGranularity(1f);
+        yAxisLeft.setAxisMinimum(0f);
+
+        YAxis yAxisRight = barChart.getAxisRight();
+        yAxisRight.setEnabled(false);
 
         // Establecer los datos en el gráfico y refrescar
         barChart.setData(barData);

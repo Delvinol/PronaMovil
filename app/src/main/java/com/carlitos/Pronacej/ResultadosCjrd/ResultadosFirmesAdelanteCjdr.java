@@ -1,11 +1,15 @@
 package com.carlitos.Pronacej.ResultadosCjrd;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.carlitos.Pronacej.ActivitysPadres.CategoriaMenu;
 import com.carlitos.Pronacej.R;
 import com.github.mikephil.charting.charts.BarChart;
 import com.github.mikephil.charting.components.Legend;
@@ -55,7 +59,7 @@ public class ResultadosFirmesAdelanteCjdr extends AppCompatActivity {
         barChart.getDescription().setEnabled(false);
         barChart.getXAxis().setPosition(XAxis.XAxisPosition.BOTTOM);
         barChart.getXAxis().setDrawGridLines(false);
-        barChart.getXAxis().setValueFormatter(new IndexAxisValueFormatter(new String[]{"Aplica", "No Aplica"}));
+        barChart.getXAxis().setValueFormatter(new IndexAxisValueFormatter(new String[]{"Si Participan", "No Participan"}));
         barChart.getXAxis().setGranularity(1f); // Intervalo mínimo entre etiquetas
         barChart.getXAxis().setLabelCount(2); // Asegura que solo haya 2 etiquetas
 
@@ -74,5 +78,25 @@ public class ResultadosFirmesAdelanteCjdr extends AppCompatActivity {
 
         ((TextView) findViewById(R.id.textViewfirmes_no_aplicaPorcentaje)).setText(String.format("%.2f%%", porcentajeNoAplica));
         ((TextView) findViewById(R.id.textViewfirmes_no_aplica)).setText("No aplica");
+
+
+
+        Button ButtonBack = findViewById(R.id.buttonBack);
+        Button ButtonHome = findViewById(R.id.buttonHome);
+
+        ButtonHome.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intentHome = new Intent(ResultadosFirmesAdelanteCjdr.this, CategoriaMenu.class);
+                startActivity(intentHome);
+            }
+
+        });
+        ButtonBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onBackPressed(); // Llamar al método onBackPressed para ir atrás
+            }
+        });
     }
 }

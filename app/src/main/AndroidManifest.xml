@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
-
     <!-- Agregando permisos para poder usar las funcionalidades necesarias -->
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
@@ -9,11 +8,10 @@
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <uses-permission android:name="android.permission.READ_DOWNLOADS" />
 
-
     <application
         android:allowBackup="true"
-        android:enableOnBackInvokedCallback="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
+        android:enableOnBackInvokedCallback="true"
         android:fullBackupContent="@xml/backup_rules"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
@@ -23,10 +21,19 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
+            android:name=".ResultadosSoa.ResultadoIntervencionTera"
+            android:exported="false" />
+        <activity
+            android:name=".ResultadosSoa.ResultadoInterTera"
+            android:exported="false" />
+        <activity
             android:name=".OpcionesCjdr.TratamientoDiferenciadoCjdrActivity"
             android:exported="false" />
         <activity
             android:name=".ResultadosSoa.ResultadoReporteDiarioSoa"
+            android:exported="false" />
+        <activity
+            android:name=".ResultadosCjrd.ResultadosProgramasGradualesCjdr"
             android:exported="false" />
         <activity
             android:name=".FiltrosCjdr.FiltroEdadCjdr"
@@ -34,7 +41,6 @@
         <activity
             android:name=".ResultadosCjrd.ResultadoEdadCjdr"
             android:exported="false" />
-
         <activity
             android:name=".FiltrosSoa.FiltroEdadSoa"
             android:exported="false" />
@@ -53,7 +59,6 @@
         <activity
             android:name=".FiltrosSoa.FiltroSimpleSoa"
             android:exported="false" />
-
         <activity
             android:name=".OpcionesCjdr.InsercionEducativaCjdrActivity"
             android:exported="false" />
@@ -75,7 +80,6 @@
         <activity
             android:name=".OpcionesSoa.PoblacionSoaActivity"
             android:exported="false" />
-
         <activity
             android:name=".OpcionesSoa.TratamientoDiferenciadoSoaActivity"
             android:exported="false" />
@@ -109,21 +113,15 @@
         <activity
             android:name=".ResultadosSoa.ResultadosEstadoSoa"
             android:exported="false" />
-
-
-
         <activity
             android:name=".ResultadosSoa.ResultadosSituacionJuridicaActualSoa"
             android:exported="false" />
-
         <activity
             android:name=".ResultadosCjrd.ResultadosSituacionJuridicaCjdr"
             android:exported="false" />
-
         <activity
             android:name=".ResultadosCjrd.ResultadosEstadoCjrd"
             android:exported="false" />
-
         <activity
             android:name=".ResultadosCjrd.ResultadosEstadoCivilCjdr"
             android:exported="false" />
@@ -136,29 +134,24 @@
         <activity
             android:name=".ActivitysPadres.CategoriaMenu"
             android:exported="false" />
-
-        <activity android:name=".ActivitysPadres.MenuSoaActivity"
+        <activity
+            android:name=".ActivitysPadres.MenuSoaActivity"
             android:exported="false" />
-
         <activity
             android:name=".ActivitysPadres.OpcionesCentrosJuvenilesActivity"
             android:exported="false" />
         <activity
             android:name=".FiltroCjdrTotal.FiltroEducativaTotalCjdr"
             android:exported="false" />
-
         <activity
             android:name=".FiltroCjdrTotal.FiltroInfraccionTotalCjdr"
             android:exported="false" />
-
         <activity
             android:name=".FiltroCjdrTotal.FiltroLaboralTotalCjdr"
             android:exported="false" />
-
         <activity
             android:name=".FiltroCjdrTotal.FiltroPoblacionTotalCjdr"
             android:exported="false" />
-
         <activity
             android:name=".FiltroCjdrTotal.FiltroTratamientoTotalCjdr"
             android:exported="false" />
@@ -177,11 +170,9 @@
         <activity
             android:name=".FiltroSoaTotal.FiltroPoblacionTotalSoa"
             android:exported="false" />
-
         <activity
             android:name=".ActivitysPadres.MenuTotalesSoaActivity"
             android:exported="false" />
-
         <activity
             android:name=".ActivitysPadres.MenuTotalesCjdrActivity"
             android:exported="false" />
@@ -224,23 +215,18 @@
         <activity
             android:name=".ResultadosCjrd.ResultadoAgresoresSexualesCjdr"
             android:exported="false" />
-
-
         <activity
             android:name=".ResultadosSoa.ResultadosSeguroMedicoSoa"
             android:exported="false" />
-
         <activity
             android:name=".ResultadosCjrd.ResultadosDelitoCjdr"
             android:exported="false" />
         <activity
             android:name=".ResultadosCjrd.ResultadosSituacionJuridicaActualCjdr"
             android:exported="false" />
-
         <activity
             android:name=".ResultadosCjrd.ResultadosSituacionJuridicaIngresoCjdr"
             android:exported="false" />
-
         <activity
             android:name=".ResultadosCjrd.ResultadosSaludMentalCjdr"
             android:exported="false" />
@@ -262,31 +248,24 @@
         <activity
             android:name=".ResultadosCjrd.ResultadoCentroEducativoCjdr"
             android:exported="false" />
-
         <activity
             android:name=".ResultadosSoa.ResultadoAdnSoa"
             android:exported="false" />
-
         <activity
             android:name=".ResultadosSoa.ResultadoAgresoresSexualesSoa"
             android:exported="false" />
-
         <activity
             android:name=".ResultadosSoa.ResultadoCentroEducativoSoa"
             android:exported="false" />
-
         <activity
             android:name=".ResultadosSoa.ResultadoIntervencionTerapeuticaSoa"
             android:exported="false" />
-
         <activity
             android:name=".ResultadosSoa.ResultadoJusticiaTerapeuticaSoa"
             android:exported="false" />
-
         <activity
             android:name=".ResultadosSoa.ResultadoReinsercionEducativaSoa"
             android:exported="false" />
-
         <activity
             android:name=".ResultadosSoa.ResultadosFirmesAdelanteSoa"
             android:exported="false" />
@@ -296,23 +275,18 @@
         <activity
             android:name=".ResultadosSoa.ResultadosSaludMentalSoa"
             android:exported="false" />
-
         <activity
             android:name=".ResultadosSoa.ResultadosSituacionJuridicaSoa"
             android:exported="false" />
         <activity
             android:name=".ResultadosSoa.ResultadosTotalPoblacionSoa"
             android:exported="false" />
-
         <activity
             android:name=".ResultadosCjrd.ResultadosSituacionLaboralActualCjdr"
             android:exported="false" />
-
         <activity
             android:name=".ResultadosCjrd.ResultadosSeguroMedicoCjdr"
             android:exported="false" />
-
-
         <activity
             android:name=".ActivitysPadres.LoginActivity"
             android:exported="true">

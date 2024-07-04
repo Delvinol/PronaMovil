@@ -14,12 +14,10 @@ import android.widget.TextView;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.carlitos.Pronacej.FiltrosCjdr.FiltroTratamientoCjdr;
-import com.carlitos.Pronacej.OpcionesCjdr.TratamientoDiferenciadoCjdrActivity;
+import com.carlitos.Pronacej.ActivitysPadres.CategoriaMenu;
 import com.carlitos.Pronacej.OpcionesSoa.TratamientoDiferenciadoSoaActivity;
 import com.carlitos.Pronacej.R;
 import com.carlitos.Pronacej.Utils.Apis;
-import com.carlitos.Pronacej.Utils.CjdrService;
 import com.carlitos.Pronacej.Utils.SoaService;
 
 import java.util.Calendar;
@@ -47,8 +45,8 @@ public class FiltroTratamientoSoa extends AppCompatActivity {
     private int salud_no;
     private int adn_si;
     private int adn_no;
-    private int intervencion_aplica;
-    private int intervencion_no_aplica;
+    private int comunidad_si;
+    private int comunidad_no;
     private int firmes_aplica;
     private int firmes_no_aplica;
 
@@ -95,6 +93,24 @@ public class FiltroTratamientoSoa extends AppCompatActivity {
             }
         });
         setupCheckBoxListeners();
+
+        Button ButtonBack = findViewById(R.id.buttonBack);
+        Button ButtonHome = findViewById(R.id.buttonHome);
+
+        ButtonHome.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intentHome = new Intent(FiltroTratamientoSoa.this, CategoriaMenu.class);
+                startActivity(intentHome);
+            }
+
+        });
+        ButtonBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onBackPressed(); // Llamar al método onBackPressed para ir atrás
+            }
+        });
     }
     private void setupCheckBoxListeners() {
         cbIncluirEstadoIng.setOnCheckedChangeListener((buttonView, isChecked) -> {
@@ -138,8 +154,8 @@ public class FiltroTratamientoSoa extends AppCompatActivity {
                         salud_no = getIntValue(firstElement, "salud_no");
                         adn_si = getIntValue(firstElement, "adn_si");
                         adn_no = getIntValue(firstElement, "adn_no");
-                        intervencion_aplica = getIntValue(firstElement, "intervencion_aplica");
-                        intervencion_no_aplica = getIntValue(firstElement, "intervencion_no_aplica");
+                        comunidad_no = getIntValue(firstElement, "comunidad_no");
+                        comunidad_si = getIntValue(firstElement, "comunidad_si");
                         firmes_aplica = getIntValue(firstElement, "firmes_aplica");
                         firmes_no_aplica = getIntValue(firstElement, "firmes_no_aplica");
 
@@ -159,8 +175,8 @@ public class FiltroTratamientoSoa extends AppCompatActivity {
                         intent.putExtra("salud_no", salud_no);
                         intent.putExtra("adn_si", adn_si);
                         intent.putExtra("adn_no", adn_no);
-                        intent.putExtra("intervencion_aplica", intervencion_aplica);
-                        intent.putExtra("intervencion_no_aplica", intervencion_no_aplica);
+                        intent.putExtra("comunidad_no", comunidad_no);
+                        intent.putExtra("comunidad_si", comunidad_si);
                         intent.putExtra("firmes_aplica", firmes_aplica);
                         intent.putExtra("ingresoProcesado", firmes_no_aplica);
 
@@ -240,6 +256,10 @@ public class FiltroTratamientoSoa extends AppCompatActivity {
     public void openDatePicker(View view) {
         datePickerDialog.show();
     }
+    public void openDatePickerInicio(View view) {
+        datePickerDialog.show();
+    }
+
 
     public String showSelectedDate(View view) {
         String[] dateParts = selectedDate.split(" ");

@@ -15,60 +15,75 @@
         android:layout_height="match_parent">
 
 
-        <LinearLayout
-            android:id="@+id/linearLayout3"
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/constraintLayout0"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
             android:layout_marginTop="16dp"
-            android:orientation="vertical"
+            android:layout_marginEnd="8dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginStart="24dp"
-                android:layout_marginTop="16dp"
-                android:layout_marginEnd="24dp">
+            <Button
+                android:id="@+id/buttonHome"
+                android:layout_width="45dp"
+                android:layout_height="45dp"
+                android:layout_marginStart="8dp"
+                android:layout_weight="0.5"
+                android:background="@drawable/baseline_home_24"
+                android:backgroundTint="@color/Pronacej3"
+                android:textColor="@color/white"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:orientation="horizontal"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/buttonBack"
+                app:layout_constraintStart_toEndOf="@+id/buttonHome"
+                app:layout_constraintTop_toTopOf="parent">
 
                 <ImageView
                     android:id="@+id/imageView5"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:srcCompat="@drawable/user_1" />
+                    android:layout_width="70dp"
+                    android:layout_height="70dp"
+                    app:srcCompat="@drawable/user_1"
+                    tools:layout_editor_absoluteX="112dp" />
 
                 <TextView
                     android:id="@+id/textView4"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="24dp"
+                    android:layout_marginStart="5dp"
                     android:fontFamily="@font/montserrat_bold"
                     android:text="Bienvenido\nMiguel"
                     android:textColor="#363636"
-                    android:textSize="20sp"
+                    android:textSize="16sp"
                     android:textStyle="bold"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintStart_toEndOf="@+id/imageView5"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    tools:layout_editor_absoluteX="193dp"
+                    tools:layout_editor_absoluteY="14dp" />
 
-                <TextView
-                    android:id="@+id/textView17"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginEnd="8dp"
-                    android:fontFamily="@font/montserrat_regular"
-                    android:text="CJDR"
-                    android:textColor="#363636"
-                    android:textSize="24sp"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-            </androidx.constraintlayout.widget.ConstraintLayout>
+            </LinearLayout>
 
-        </LinearLayout>
+            <Button
+                android:id="@+id/buttonBack"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.5"
+                android:backgroundTint="@color/Pronacej3"
+                android:text="Atrás"
+                android:textColor="@color/white"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -76,7 +91,7 @@
             android:layout_marginBottom="16dp"
             android:orientation="vertical"
             app:layout_constraintBottom_toTopOf="@+id/linearLayout5"
-            app:layout_constraintTop_toBottomOf="@+id/linearLayout3">
+            app:layout_constraintTop_toBottomOf="@+id/constraintLayout0">
 
             <TextView
                 android:id="@+id/textView16"
@@ -87,7 +102,7 @@
                 android:layout_marginEnd="24dp"
                 android:layout_marginBottom="16sp"
                 android:fontFamily="@font/montserrat_regular"
-                android:text="Elige tu categoría"
+                android:text="CJDR\nElige tu categoría"
                 android:textColor="@color/black"
                 android:textSize="26sp"
                 android:textStyle="bold" />
@@ -134,7 +149,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="8dp"
                         android:fontFamily="@font/montserrat_bold"
-                        android:text="Población Total"
+                        android:text="Reporte diario"
                         android:textColor="@color/white"
                         android:textSize="18sp"
                         android:textStyle="bold"
@@ -142,6 +157,7 @@
                         app:layout_constraintStart_toStartOf="@+id/imageView02"
                         app:layout_constraintTop_toBottomOf="@+id/imageView02" />
                 </androidx.constraintlayout.widget.ConstraintLayout>
+
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/Opcion1"
                     android:layout_width="0dp"
@@ -208,7 +224,7 @@
                     <ImageView
                         android:id="@+id/imageView05"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_height="match_parent"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:srcCompat="@drawable/light_3" />
@@ -231,12 +247,14 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="8dp"
+                        android:layout_marginBottom="8dp"
                         android:fontFamily="@font/montserrat_bold"
                         android:gravity="center"
-                        android:text="Inserción \n educativa"
+                        android:text="Situación educativa actual"
                         android:textColor="@color/white"
                         android:textSize="18sp"
                         android:textStyle="bold"
+                        app:layout_constraintBottom_toBottomOf="@+id/imageView05"
                         app:layout_constraintEnd_toEndOf="@+id/imageView06"
                         app:layout_constraintStart_toStartOf="@+id/imageView06"
                         app:layout_constraintTop_toBottomOf="@+id/imageView06" />
@@ -245,7 +263,7 @@
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/Opcion4"
                     android:layout_width="0dp"
-                    android:layout_height="180dp"
+                    android:layout_height="match_parent"
                     android:layout_marginStart="12dp"
                     android:layout_weight="0.5"
                     android:background="@drawable/btn_background_oficial_3">
@@ -340,6 +358,7 @@
                         app:layout_constraintStart_toStartOf="@+id/imageView10"
                         app:layout_constraintTop_toBottomOf="@+id/imageView10" />
                 </androidx.constraintlayout.widget.ConstraintLayout>
+
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/Opcion2"
                     android:layout_width="0dp"
@@ -385,7 +404,6 @@
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
             </LinearLayout>
-
 
 
         </LinearLayout>

@@ -1,8 +1,10 @@
 package com.carlitos.Pronacej.ActivitysPadres;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
@@ -40,6 +42,14 @@ public class MenuTotalesSoaActivity extends AppCompatActivity {
         ConstraintLayout opcionCuatro = findViewById(R.id.Opcion4);
         ConstraintLayout opcionCinco = findViewById(R.id.Opcion5);
 
+
+        // Recuperar el nombre del usuario desde SharedPreferences
+        SharedPreferences sharedPreferences = getSharedPreferences("UserPrefs", MODE_PRIVATE);
+        String userName = sharedPreferences.getString("userName", "Usuario");
+
+        // Actualizar todos los TextView4 con el nombre del usuario
+        TextView textView4 = findViewById(R.id.textView4);
+        textView4.setText("Bienvenido\n" + userName);
 
 
         // Eventos que abrirá las otras actividades

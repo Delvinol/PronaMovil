@@ -2,14 +2,20 @@ package com.carlitos.Pronacej.ResultadosSoa;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 
+import com.carlitos.Pronacej.ActivitysPadres.CategoriaMenu;
 import com.carlitos.Pronacej.R;
 import com.github.mikephil.charting.charts.HorizontalBarChart;
+import com.github.mikephil.charting.components.XAxis;
+import com.github.mikephil.charting.components.YAxis;
 import com.github.mikephil.charting.data.BarData;
 import com.github.mikephil.charting.data.BarDataSet;
 import com.github.mikephil.charting.data.BarEntry;
@@ -29,7 +35,26 @@ public class ResultadosSituacionJuridicaSoa extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.resultado_situacion_juridica_soa);// Obtener los valores de ingresoSentenciado y ingresoProcesado
+        setContentView(R.layout.resultado_situacion_juridica_soa);
+
+        // Obtener los valores de ingresoSentenciado y ingresoProcesado
+        Button ButtonBack = findViewById(R.id.buttonBack);
+        Button ButtonHome = findViewById(R.id.buttonHome);
+
+        ButtonHome.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intentHome = new Intent(ResultadosSituacionJuridicaSoa.this, CategoriaMenu.class);
+                startActivity(intentHome);
+            }
+
+        });
+        ButtonBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onBackPressed(); // Llamar al método onBackPressed para ir atrás
+            }
+        });
         barChart = findViewById(R.id.barChart);
 
         // Obtener los datos pasados desde la actividad anterior
@@ -99,8 +124,7 @@ public class ResultadosSituacionJuridicaSoa extends AppCompatActivity {
         textViewsNombre[0] = findViewById(R.id.textViewLima);
 
         // Crear los objetos BarEntry a partir de los datos
-        ArrayList<BarEntry> varonesEntries = new ArrayList<>();
-        ArrayList<BarEntry> mujeresEntries = new ArrayList<>();
+        ArrayList<BarEntry> entries = new ArrayList<>();
 
         // Calcular la población total
         float totalVarones = 0;
@@ -116,28 +140,36 @@ public class ResultadosSituacionJuridicaSoa extends AppCompatActivity {
             float varones = parseFloat(data.get("varones_soa"));
             float mujeres = parseFloat(data.get("mujeres_soa"));
             float total = varones + mujeres;
-            float porcentajeVarones = (varones / totalVarones) * 100;
-            float porcentajeMujeres = (mujeres / totalMujeres) * 100;
+            float porcentajeVarones = (varones / total) * 100;
+            float porcentajeMujeres = (mujeres / total) * 100;
 
-            varonesEntries.add(new BarEntry(i, varones));
-            mujeresEntries.add(new BarEntry(i, mujeres));
-            textViewsPorcentaje[i].setText(String.format("Varones: %.2f%%, Mujeres: %.2f%%", porcentajeVarones, porcentajeMujeres));
+            // Crear una entrada para cada centro_cjdr con los porcentajes de mayores y menores
+            entries.add(new BarEntry(i, new float[]{porcentajeMujeres, porcentajeVarones}));
+            textViewsPorcentaje[i].setText(String.format("Mujeres: %.0f, \n Varones: %.0f", mujeres, varones));
             textViewsNombre[i].setText(data.get("centro_soa"));
         }
 
-        // Crear los conjuntos de datos para el gráfico de barras
-        BarDataSet varonesDataSet = new BarDataSet(varonesEntries, "Varones");
-        varonesDataSet.setColor(ContextCompat.getColor(this, R.color.Pronacej1));
-        varonesDataSet.setValueTextSize(12f);
-        varonesDataSet.setValueTextColor(ContextCompat.getColor(this, R.color.black));
+        ArrayList<Integer> colors = new ArrayList<>();
+        colors.add(ContextCompat.getColor(this, R.color.Pronacej10));
+        colors.add(ContextCompat.getColor(this, R.color.Pronacej9));
 
-        BarDataSet mujeresDataSet = new BarDataSet(mujeresEntries, "Mujeres");
-        mujeresDataSet.setColor(ContextCompat.getColor(this, R.color.Pronacej2));
-        mujeresDataSet.setValueTextSize(12f);
-        mujeresDataSet.setValueTextColor(ContextCompat.getColor(this, R.color.black));
+        // Crear los conjuntos de datos para el gráfico de barras
+        BarDataSet dataSet = new BarDataSet(entries, "");
+        dataSet.setColors(getColors()); // Colores para cada conjunto de barras
+        dataSet.setValueTextSize(12f);
+        dataSet.setValueTextColor(ContextCompat.getColor(this, R.color.black));
+        dataSet.setStackLabels(new String[]{"Varones", "Mujeres"}); // Etiquetas para las partes apiladas
+
+        // Asigna el ValueFormatter al dataSet para mostrar porcentajes
+        dataSet.setValueFormatter(new ValueFormatter() {
+            @Override
+            public String getFormattedValue(float value) {
+                return String.format("%.1f%%", value); // Mostrar porcentajes en las barras
+            }
+        });
 
         // Crear los datos del gráfico de barras
-        BarData barData = new BarData(varonesDataSet, mujeresDataSet);
+        BarData barData = new BarData(dataSet);
 
         // Configurar la leyenda
         barChart.getLegend().setEnabled(true);
@@ -146,29 +178,56 @@ public class ResultadosSituacionJuridicaSoa extends AppCompatActivity {
         // Configurar descripción del gráfico
         barChart.getDescription().setEnabled(false);
 
+        // Añadir margen adicional a la izquierda y derecha del gráfico
+        barChart.setExtraLeftOffset(10f); // Ajusta el valor según sea necesario
+        barChart.setExtraRightOffset(60f); // Añadir margen derecho
+
         // Configurar el eje X
-        barChart.getXAxis().setValueFormatter(new ValueFormatter() {
+        XAxis xAxis = barChart.getXAxis();
+        xAxis.setValueFormatter(new ValueFormatter() {
             @Override
             public String getFormattedValue(float value) {
                 return reportData.get((int) value).get("centro_soa");
             }
         });
-        barChart.getXAxis().setGranularity(1f);
-        barChart.getXAxis().setGranularityEnabled(true);
+        xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
+        xAxis.setGranularity(1f);
+        xAxis.setGranularityEnabled(true);
+        xAxis.setLabelCount(reportData.size());
+        xAxis.setLabelRotationAngle(0);  // Mantener etiquetas en horizontal
+
+        // Ajustar el tipo de letra y el tamaño de las etiquetas del eje X
+        xAxis.setTypeface(Typeface.DEFAULT_BOLD);
+        xAxis.setTextSize(10f); // Ajusta el tamaño del texto según sea necesario
+        xAxis.setDrawLabels(true); // Asegúrate de que las etiquetas se dibujen
 
         // Configurar el eje Y
-        barChart.getAxisLeft().setGranularity(1f);
-        barChart.getAxisRight().setEnabled(false);
+        YAxis yAxisLeft = barChart.getAxisLeft();
+        yAxisLeft.setGranularity(1f);
+        yAxisLeft.setAxisMinimum(0f);
+
+        // Desactivar el eje Y derecho
+        YAxis yAxisRight = barChart.getAxisRight();
+        yAxisRight.setEnabled(false);
 
         // Establecer los datos en el gráfico y refrescar
         barChart.setData(barData);
         barChart.invalidate(); // refrescar
     }
+
     private float parseFloat(String value) {
         try {
             return value == null || value.isEmpty() ? 0 : Float.parseFloat(value);
         } catch (NumberFormatException e) {
             return 0;
         }
+    }
+
+    // Método para obtener los colores de las barras
+    private ArrayList<Integer> getColors() {
+        ArrayList<Integer> colors = new ArrayList<>();
+        colors.add(ContextCompat.getColor(this, R.color.Pronacej10)); // Color para mayores
+        colors.add(ContextCompat.getColor(this, R.color.Pronacej9));  // Color para menores
+        return colors;
     }
 }

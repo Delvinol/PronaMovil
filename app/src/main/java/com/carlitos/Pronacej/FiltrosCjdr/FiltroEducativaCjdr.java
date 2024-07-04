@@ -13,8 +13,10 @@ import android.widget.TextView;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import com.carlitos.Pronacej.OpcionesCjdr.InsercionEducativaCjdrActivity;
+
+import com.carlitos.Pronacej.ActivitysPadres.CategoriaMenu;
 import com.carlitos.Pronacej.R;
+import com.carlitos.Pronacej.ResultadosCjrd.ResultadoCentroEducativoCjdr;
 import com.carlitos.Pronacej.Utils.Apis;
 import com.carlitos.Pronacej.Utils.CjdrService;
 
@@ -60,6 +62,8 @@ public class FiltroEducativaCjdr extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.filtro_educativa_cjdr);
 
+
+
         initDatePicker();
         dateButton = findViewById(R.id.etFechaInicio);
         selectedDate = getTodaysDate();
@@ -87,6 +91,25 @@ public class FiltroEducativaCjdr extends AppCompatActivity {
             }
         });
         setupCheckBoxListeners();
+
+        Button ButtonBack = findViewById(R.id.buttonBack);
+        Button ButtonHome = findViewById(R.id.buttonHome);
+
+        ButtonHome.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intentHome = new Intent(FiltroEducativaCjdr.this, CategoriaMenu.class);
+                startActivity(intentHome);
+            }
+
+        });
+        ButtonBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onBackPressed(); // Llamar al método onBackPressed para ir atrás
+            }
+        });
+
     }
 
     private void setupCheckBoxListeners() {
@@ -135,7 +158,7 @@ public class FiltroEducativaCjdr extends AppCompatActivity {
                         ninguno = getIntValue(firstElement, "ninguno");
 
                         // Crear el Intent y añadir los extras
-                        Intent intent = new Intent(FiltroEducativaCjdr.this, InsercionEducativaCjdrActivity.class);
+                        Intent intent = new Intent(FiltroEducativaCjdr.this, ResultadoCentroEducativoCjdr.class);
                         intent.putExtra("sea_estudia", sea_estudia);
                         intent.putExtra("sea_termino_basico", sea_termino_basico);
                         intent.putExtra("sea_termino_no_doc", sea_termino_no_doc);
@@ -227,6 +250,10 @@ public class FiltroEducativaCjdr extends AppCompatActivity {
     public void openDatePicker(View view) {
         datePickerDialog.show();
     }
+    public void openDatePickerInicio(View view) {
+        datePickerDialog.show();
+    }
+
 
     public String showSelectedDate(View view) {
         String[] dateParts = selectedDate.split(" ");

@@ -15,23 +15,14 @@ import android.widget.TextView;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.carlitos.Pronacej.FiltrosSoa.FiltroPoblacionSoa;
-import com.carlitos.Pronacej.OpcionesCjdr.PoblacionCjdrActivity;
+import com.carlitos.Pronacej.ActivitysPadres.CategoriaMenu;
 import com.carlitos.Pronacej.OpcionesSoa.PoblacionSoaActivity;
 import com.carlitos.Pronacej.R;
-import com.carlitos.Pronacej.ResultadosCjrd.ResultadoReporteDiarioCJdr;
 import com.carlitos.Pronacej.Utils.Apis;
 import com.carlitos.Pronacej.Utils.CjdrService;
 import com.carlitos.Pronacej.Utils.SoaService;
-import com.github.mikephil.charting.charts.PieChart;
-import com.github.mikephil.charting.data.PieData;
-import com.github.mikephil.charting.data.PieDataSet;
-import com.github.mikephil.charting.data.PieEntry;
-import com.github.mikephil.charting.utils.ColorTemplate;
 
-import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -63,7 +54,10 @@ public class FiltroPoblacionCjdr extends AppCompatActivity {
     private DatePickerDialog datePickerDialog;
     private Button dateButton;
     private String selectedDate;
+    private SoaService soaService;
     private CjdrService cjdrService;
+
+
     private CheckBox cbIncluirEstadoIng;
     private CheckBox cbIncluirEstadoAten;
 
@@ -78,13 +72,14 @@ public class FiltroPoblacionCjdr extends AppCompatActivity {
         selectedDate = getTodaysDate();
         dateButton.setText(selectedDate);
 
-        cbIncluirEstadoIng = findViewById(R.id.cbIncluirEstadoIng);
-        cbIncluirEstadoAten = findViewById(R.id.cbIncluirEstadoAten);
-
-
         tvErrorFecha = findViewById(R.id.tvErrorFecha);
         btnGenerarGrafico = findViewById(R.id.btnEnviar);
         cjdrService = Apis.getCjdrService();
+
+
+        cbIncluirEstadoIng = findViewById(R.id.cbIncluirEstadoIng);
+        cbIncluirEstadoAten = findViewById(R.id.cbIncluirEstadoAten);
+
 
         btnGenerarGrafico.setOnClickListener(view -> {
             showSelectedDate(etFechaInicio);
@@ -101,8 +96,25 @@ public class FiltroPoblacionCjdr extends AppCompatActivity {
         });
         setupCheckBoxListeners();
 
-    }
+        Button ButtonBack = findViewById(R.id.buttonBack);
+        Button ButtonHome = findViewById(R.id.buttonHome);
 
+        ButtonHome.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intentHome = new Intent(FiltroPoblacionCjdr.this, CategoriaMenu.class);
+                startActivity(intentHome);
+            }
+
+        });
+        ButtonBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onBackPressed(); // Llamar al método onBackPressed para ir atrás
+            }
+        });
+
+    }
     private void setupCheckBoxListeners() {
         cbIncluirEstadoIng.setOnCheckedChangeListener((buttonView, isChecked) -> {
             if (isChecked) {
@@ -116,6 +128,7 @@ public class FiltroPoblacionCjdr extends AppCompatActivity {
             }
         });
     }
+
     private boolean validarFechaFormato(String fecha) {
         String pattern = "^\\d{4}-\\d{2}-\\d{2}$";
         return fecha.matches(pattern);
@@ -146,12 +159,12 @@ public class FiltroPoblacionCjdr extends AppCompatActivity {
                         sexo_femenino = getIntValue(firstElement, "sexo_femenino");
 
                         // Imprimir o almacenar los valores obtenidos
-                        Log.d("FiltroPoblacionTotalCjd", "Total Registros: " + totalRegistros);
-                        Log.d("FiltroPoblacionTotalCjd", "Ingreso Sentenciado: " + ingresoSentenciado);
-                        Log.d("FiltroPoblacionTotalCjd", "Ingreso Procesado: " + ingresoProcesado);
+                        Log.d("FiltroPoblacionTotalSoa", "Total Registros: " + totalRegistros);
+                        Log.d("FiltroPoblacionTotalSoa", "Ingreso Sentenciado: " + ingresoSentenciado);
+                        Log.d("FiltroPoblacionTotalSoa", "Ingreso Procesado: " + ingresoProcesado);
 
                         // Crear el Intent y añadir los extras
-                        Intent intent = new Intent(FiltroPoblacionCjdr.this, PoblacionCjdrActivity.class);
+                        Intent intent = new Intent(FiltroPoblacionCjdr.this, PoblacionSoaActivity.class);
                         intent.putExtra("totalRegistros", totalRegistros);
                         intent.putExtra("ingresoSentenciado", ingresoSentenciado);
                         intent.putExtra("ingresoProcesado", ingresoProcesado);
@@ -243,6 +256,10 @@ public class FiltroPoblacionCjdr extends AppCompatActivity {
     public void openDatePicker(View view) {
         datePickerDialog.show();
     }
+    public void openDatePickerInicio(View view) {
+        datePickerDialog.show();
+    }
+
 
     public String showSelectedDate(View view) {
         String[] dateParts = selectedDate.split(" ");

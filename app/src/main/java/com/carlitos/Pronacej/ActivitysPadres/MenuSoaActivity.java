@@ -1,32 +1,19 @@
 package com.carlitos.Pronacej.ActivitysPadres;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
+import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
-import com.carlitos.Pronacej.FiltrosCjdr.FiltroEducativaCjdr;
-import com.carlitos.Pronacej.FiltrosCjdr.FiltroInfraccionCjdr;
-import com.carlitos.Pronacej.FiltrosCjdr.FiltroLaboralCjdr;
-import com.carlitos.Pronacej.FiltrosCjdr.FiltroPoblacionCjdr;
-import com.carlitos.Pronacej.FiltrosCjdr.FiltroTratamientoCjdr;
 import com.carlitos.Pronacej.FiltrosSoa.FiltroEdadSoa;
 import com.carlitos.Pronacej.FiltrosSoa.FiltroEducativaSoa;
 import com.carlitos.Pronacej.FiltrosSoa.FiltroInfraccionSoa;
 import com.carlitos.Pronacej.FiltrosSoa.FiltroLaboralSoa;
-import com.carlitos.Pronacej.FiltrosSoa.FiltroPoblacionSoa;
-import com.carlitos.Pronacej.FiltrosSoa.FiltroSimpleSoa;
-import com.carlitos.Pronacej.FiltrosSoa.FiltroTratamientoSoa;
-import com.carlitos.Pronacej.OpcionesCjdr.PoblacionCjdrActivity;
-import com.carlitos.Pronacej.OpcionesCjdr.InfraccionesCometidasCjdrActivity;
-import com.carlitos.Pronacej.OpcionesCjdr.InsercionEducativaCjdrActivity;
-import com.carlitos.Pronacej.OpcionesCjdr.InsercionLaboralCjdrActivity;
-import com.carlitos.Pronacej.OpcionesCjdr.TratamientoDiferenciadoCjdrActivity;
-import com.carlitos.Pronacej.OpcionesSoa.InfraccionesCometidasSoaActivity;
-import com.carlitos.Pronacej.OpcionesSoa.InsercionEducativaSoaActivity;
-import com.carlitos.Pronacej.OpcionesSoa.InsercionLaboralSoaActivity;
 import com.carlitos.Pronacej.OpcionesSoa.PoblacionSoaActivity;
 import com.carlitos.Pronacej.OpcionesSoa.TratamientoDiferenciadoSoaActivity;
 import com.carlitos.Pronacej.R;
@@ -47,6 +34,33 @@ public class MenuSoaActivity extends AppCompatActivity {
         ConstraintLayout opcionCuatro = findViewById(R.id.Opcion4);
         ConstraintLayout opcionCinco = findViewById(R.id.Opcion5);
 
+        Button ButtonBack = findViewById(R.id.buttonBack);
+        Button ButtonHome = findViewById(R.id.buttonHome);
+
+        ButtonHome.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intentHome = new Intent(MenuSoaActivity.this, CategoriaMenu.class);
+                startActivity(intentHome);
+            }
+
+        });
+        ButtonBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onBackPressed(); // Llamar al método onBackPressed para ir atrás
+            }
+        });
+
+
+        // Recuperar el nombre del usuario desde SharedPreferences
+        SharedPreferences sharedPreferences = getSharedPreferences("UserPrefs", MODE_PRIVATE);
+        String userName = sharedPreferences.getString("userName", "Usuario");
+
+        // Actualizar todos los TextView4 con el nombre del usuario
+        TextView textView4 = findViewById(R.id.textView4);
+        textView4.setText("Bienvenido\n" + userName);
+
 
 
         // Eventos que abrirá las otras actividades
@@ -61,7 +75,7 @@ public class MenuSoaActivity extends AppCompatActivity {
         opcionDos.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(MenuSoaActivity.this, FiltroTratamientoSoa.class);
+                Intent intent = new Intent(MenuSoaActivity.this, TratamientoDiferenciadoSoaActivity.class);
                 startActivity(intent);
             }
         });
@@ -93,7 +107,7 @@ public class MenuSoaActivity extends AppCompatActivity {
         opcionOcho.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(MenuSoaActivity.this, FiltroSimpleSoa.class);
+                Intent intent = new Intent(MenuSoaActivity.this, PoblacionSoaActivity.class);
                 startActivity(intent);
             }
         });

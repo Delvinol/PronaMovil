@@ -14,10 +14,9 @@ import android.widget.TextView;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
-
-import com.carlitos.Pronacej.OpcionesCjdr.InsercionEducativaCjdrActivity;
-import com.carlitos.Pronacej.OpcionesCjdr.InsercionLaboralCjdrActivity;
+import com.carlitos.Pronacej.ActivitysPadres.CategoriaMenu;
 import com.carlitos.Pronacej.R;
+import com.carlitos.Pronacej.ResultadosCjrd.ResultadosSituacionLaboralActualCjdr;
 import com.carlitos.Pronacej.Utils.Apis;
 import com.carlitos.Pronacej.Utils.CjdrService;
 
@@ -36,10 +35,8 @@ public class FiltroLaboralCjdr extends AppCompatActivity {
     private int seguro_essalud;
     private int seguro_particular;
     private int seguro_ninguno;
-    private int inser_labo_interna;
-    private int inser_labo_externa;
-    private int no_trabaja;
-
+    private int trabaja_si;
+    private int trabaja_no;
     private EditText etFechaInicio;
     private TextView tvErrorFecha;
     private Button btnGenerarGrafico;
@@ -86,6 +83,24 @@ public class FiltroLaboralCjdr extends AppCompatActivity {
         });
         setupCheckBoxListeners();
 
+        Button ButtonBack = findViewById(R.id.buttonBack);
+        Button ButtonHome = findViewById(R.id.buttonHome);
+
+        ButtonHome.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intentHome = new Intent(FiltroLaboralCjdr.this, CategoriaMenu.class);
+                startActivity(intentHome);
+            }
+
+        });
+        ButtonBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onBackPressed(); // Llamar al método onBackPressed para ir atrás
+            }
+        });
+
     }
     private void setupCheckBoxListeners() {
         cbIncluirEstadoIng.setOnCheckedChangeListener((buttonView, isChecked) -> {
@@ -121,19 +136,18 @@ public class FiltroLaboralCjdr extends AppCompatActivity {
                         seguro_essalud = getIntValue(firstElement, "seguro_essalud");
                         seguro_particular = getIntValue(firstElement, "seguro_particular");
                         seguro_ninguno = getIntValue(firstElement, "seguro_ninguno");
-                        inser_labo_interna = getIntValue(firstElement, "inser_labo_interna");
-                        inser_labo_externa = getIntValue(firstElement, "inser_labo_externa");
-                        no_trabaja = getIntValue(firstElement, "no_trabaja");
+                        trabaja_si = getIntValue(firstElement, "trabaja_si");
+                        trabaja_no = getIntValue(firstElement, "trabaja_no");
+
 
                         // Crear el Intent y añadir los extras
-                        Intent intent = new Intent(FiltroLaboralCjdr.this, InsercionLaboralCjdrActivity.class);
+                        Intent intent = new Intent(FiltroLaboralCjdr.this, ResultadosSituacionLaboralActualCjdr.class);
                         intent.putExtra("seguro_sis", seguro_sis);
                         intent.putExtra("seguro_essalud", seguro_essalud);
                         intent.putExtra("seguro_particular", seguro_particular);
                         intent.putExtra("seguro_ninguno", seguro_ninguno);
-                        intent.putExtra("inser_labo_interna", inser_labo_interna);
-                        intent.putExtra("inser_labo_externa", inser_labo_externa);
-                        intent.putExtra("no_trabaja", no_trabaja);
+                        intent.putExtra("trabaja_no", trabaja_no);
+                        intent.putExtra("trabaja_si", trabaja_si);
                         // Iniciar la actividad PoblacionCjdrActivity
                         startActivity(intent);
                     }
@@ -211,6 +225,10 @@ public class FiltroLaboralCjdr extends AppCompatActivity {
     public void openDatePicker(View view) {
         datePickerDialog.show();
     }
+    public void openDatePickerInicio(View view) {
+        datePickerDialog.show();
+    }
+
 
     public String showSelectedDate(View view) {
         String[] dateParts = selectedDate.split(" ");

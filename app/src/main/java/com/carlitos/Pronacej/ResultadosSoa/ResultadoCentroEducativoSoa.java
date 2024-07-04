@@ -1,13 +1,17 @@
 package com.carlitos.Pronacej.ResultadosSoa;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.carlitos.Pronacej.ActivitysPadres.CategoriaMenu;
 import com.carlitos.Pronacej.R;
-import com.github.mikephil.charting.charts.BarChart;
+import com.github.mikephil.charting.charts.HorizontalBarChart;
 import com.github.mikephil.charting.components.Legend;
 import com.github.mikephil.charting.components.XAxis;
 import com.github.mikephil.charting.components.YAxis;
@@ -35,6 +39,24 @@ public class ResultadoCentroEducativoSoa extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.resultado_centro_educativo_soa);
 
+        Button ButtonBack = findViewById(R.id.buttonBack);
+        Button ButtonHome = findViewById(R.id.buttonHome);
+
+        ButtonHome.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intentHome = new Intent(ResultadoCentroEducativoSoa.this, CategoriaMenu.class);
+                startActivity(intentHome);
+            }
+
+        });
+        ButtonBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onBackPressed(); // Llamar al método onBackPressed para ir atrás
+            }
+        });
+
         // Obtener los valores de las variables desde el intent
         cebr = getIntent().getIntExtra("cebr", 0);
         ceba = getIntent().getIntExtra("ceba", 0);
@@ -59,47 +81,48 @@ public class ResultadoCentroEducativoSoa extends AppCompatActivity {
         double porcentajeNinguno = (double) ninguno / totalPersonas * 100;
 
         // Configurar TextViews para mostrar los porcentajes y nombres
-        ((TextView) findViewById(R.id.textViewcebrPorcentaje)).setText(String.format("%.2f%%", porcentajeCebr));
+        ((TextView) findViewById(R.id.textViewcebrPorcentaje)).setText(String.format("%d", cebr));
         ((TextView) findViewById(R.id.textViewcebr)).setText("CEBR");
 
-        ((TextView) findViewById(R.id.textViewcebaPorcentaje)).setText(String.format("%.2f%%", porcentajeCeba));
+        ((TextView) findViewById(R.id.textViewcebaPorcentaje)).setText(String.format("%d", ceba));
         ((TextView) findViewById(R.id.textViewceba)).setText("CEBA");
 
-        ((TextView) findViewById(R.id.textViewceprePorcentaje)).setText(String.format("%.2f%%", porcentajeCepre));
+        ((TextView) findViewById(R.id.textViewceprePorcentaje)).setText(String.format("%d", cepre));
         ((TextView) findViewById(R.id.textViewcepre)).setText("CEPRE");
 
-        ((TextView) findViewById(R.id.textViewacademiaPorcentaje)).setText(String.format("%.2f%%", porcentajeAcademia));
+        ((TextView) findViewById(R.id.textViewacademiaPorcentaje)).setText(String.format("%d", academia));
         ((TextView) findViewById(R.id.textViewacademia)).setText("Academia");
 
-        ((TextView) findViewById(R.id.textViewcetproPorcentaje)).setText(String.format("%.2f%%", porcentajeCetpro));
+        ((TextView) findViewById(R.id.textViewcetproPorcentaje)).setText(String.format("%d", cetpro));
         ((TextView) findViewById(R.id.textViewcetpro)).setText("CETPRO");
 
-        ((TextView) findViewById(R.id.textViewinstitutoPorcentaje)).setText(String.format("%.2f%%", porcentajeInstituto));
+        ((TextView) findViewById(R.id.textViewinstitutoPorcentaje)).setText(String.format("%d", instituto));
         ((TextView) findViewById(R.id.textViewinstituto)).setText("Instituto");
 
-        ((TextView) findViewById(R.id.textViewuniversidadPorcentaje)).setText(String.format("%.2f%%", porcentajeUniversidad));
+        ((TextView) findViewById(R.id.textViewuniversidadPorcentaje)).setText(String.format("%d", universidad));
         ((TextView) findViewById(R.id.textViewuniversidad)).setText("Universidad");
 
-        ((TextView) findViewById(R.id.textViewningunoPorcentaje)).setText(String.format("%.2f%%", porcentajeNinguno));
+        ((TextView) findViewById(R.id.textViewningunoPorcentaje)).setText(String.format("%d", ninguno));
         ((TextView) findViewById(R.id.textViewninguno)).setText("Ninguno");
 
-        // Configurar el gráfico de barras
-        BarChart barChart = findViewById(R.id.barChart);
+        // Configurar el gráfico de barras horizontales
+        HorizontalBarChart barChart = findViewById(R.id.barChart);
 
         ArrayList<BarEntry> entries = new ArrayList<>();
-        entries.add(new BarEntry(0, cebr));
-        entries.add(new BarEntry(1, ceba));
-        entries.add(new BarEntry(2, cepre));
-        entries.add(new BarEntry(3, academia));
-        entries.add(new BarEntry(4, cetpro));
-        entries.add(new BarEntry(5, instituto));
-        entries.add(new BarEntry(6, universidad));
-        entries.add(new BarEntry(7, ninguno));
+        entries.add(new BarEntry(0, (float) porcentajeCebr));
+        entries.add(new BarEntry(1, (float) porcentajeCeba));
+        entries.add(new BarEntry(2, (float) porcentajeCepre));
+        entries.add(new BarEntry(3, (float) porcentajeAcademia));
+        entries.add(new BarEntry(4, (float) porcentajeCetpro));
+        entries.add(new BarEntry(5, (float) porcentajeInstituto));
+        entries.add(new BarEntry(6, (float) porcentajeUniversidad));
+        entries.add(new BarEntry(7, (float) porcentajeNinguno));
 
         // Configurar los nombres en la leyenda
         String[] legendLabels = {"CEBR", "CEBA", "CEPRE", "Academia", "CETPRO", "Instituto", "Universidad", "Ninguno"};
 
         BarDataSet dataSet = new BarDataSet(entries, "Centro Educativo");
+        dataSet.setValueFormatter(new PercentValueFormatter());
 
         // Asignar colores a las barras
         ArrayList<Integer> colors = new ArrayList<>();
@@ -116,20 +139,27 @@ public class ResultadoCentroEducativoSoa extends AppCompatActivity {
         ArrayList<IBarDataSet> dataSets = new ArrayList<>();
         dataSets.add(dataSet);
 
+
         BarData barData = new BarData(dataSets);
         barChart.setData(barData);
 
         barChart.getDescription().setEnabled(false);
 
+
         XAxis xAxis = barChart.getXAxis();
         xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
         xAxis.setDrawGridLines(false);
-        xAxis.setValueFormatter(new CustomAxisValueFormatter(legendLabels, barChart));
+        xAxis.setValueFormatter(new IndexAxisValueFormatter(legendLabels));
+        xAxis.setGranularity(1f);
+        xAxis.setGranularityEnabled(true);
 
-        YAxis yAxis = barChart.getAxisLeft();
-        yAxis.setDrawGridLines(false);
+        YAxis yAxisLeft = barChart.getAxisLeft();
+        yAxisLeft.setDrawGridLines(false);
+        yAxisLeft.setGranularity(1f);
+        yAxisLeft.setAxisMinimum(0f);
 
-        barChart.getAxisRight().setEnabled(false);
+        YAxis yAxisRight = barChart.getAxisRight();
+        yAxisRight.setEnabled(false);
 
         Legend legend = barChart.getLegend();
         legend.setTextSize(12f);
@@ -144,33 +174,9 @@ public class ResultadoCentroEducativoSoa extends AppCompatActivity {
 
         barChart.invalidate();
     }
-
-    // Clase formateadora personalizada para el eje X
-    class CustomAxisValueFormatter extends IndexAxisValueFormatter {
-
-        private final String[] originalLabels;
-        private final BarChart barChart;
-
-        public CustomAxisValueFormatter(String[] labels, BarChart barChart) {
-            super(labels);
-            this.originalLabels = labels;
-            this.barChart = barChart;
-        }
-
-        @Override
+    public class PercentValueFormatter extends com.github.mikephil.charting.formatter.ValueFormatter {
         public String getFormattedValue(float value) {
-            int index = (int) value;
-            if (index >= 0 && index < originalLabels.length) {
-                String label = originalLabels[index];
-                if (barChart.getViewPortHandler().getScaleX() > 1) {
-                    // Mostrar la etiqueta completa si el zoom está activo
-                    return label;
-                } else {
-                    // Mostrar solo las primeras 6 letras si no hay zoom
-                    return label.length() > 6 ? label.substring(0, 6) : label;
-                }
-            }
-            return "";
+            return String.format("%.1f%%", value);
         }
     }
 }

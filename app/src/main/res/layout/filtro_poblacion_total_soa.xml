@@ -8,19 +8,42 @@
 
     >
 
-    <TextView
-        android:id="@+id/textView"
-        android:layout_width="wrap_content"
+
+    <LinearLayout
+        android:id="@+id/linearLayout12"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="40dp"
-        android:paddingTop="10dp"
-        android:text="Elegir fechas  \n del gráfico"
-        android:textSize="34sp"
-        android:textStyle="bold"
+        android:layout_marginTop="16dp"
+        android:gravity="center"
+        android:orientation="horizontal"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent">
 
+        <Button
+            android:id="@+id/button"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_marginRight="20dp"
+            android:background="@drawable/baseline_keyboard_backspace_24" />
+
+        <TextView
+            android:id="@+id/textView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingTop="10dp"
+            android:text="Elegir fecha  \n del gráfico"
+            android:textSize="34sp"
+            android:textStyle="bold" />
+
+        <Button
+            android:id="@+id/button3"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_marginLeft="20dp"
+            android:background="@drawable/baseline_home_24" />
+
+    </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -30,8 +53,7 @@
         app:layout_constraintBottom_toTopOf="@+id/linearLayout2"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView"
-        app:layout_constraintVertical_bias="0.45">
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout12">
 
         <TextView
             android:id="@+id/textView19"
@@ -110,11 +132,11 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="32sp"
             android:background="@drawable/button_background"
+            android:onClick="showSelectedDates"
             android:paddingLeft="10dp"
             android:paddingRight="10dp"
             android:text="Ver el gráfico"
-            android:textColor="@color/white"
-            android:onClick="showSelectedDates"/>
+            android:textColor="@color/white" />
     </LinearLayout>
 
     <TextView

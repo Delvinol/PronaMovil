@@ -1,8 +1,12 @@
 package com.carlitos.Pronacej.ActivitysPadres;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.view.View;;
+import android.view.View;
+import android.widget.Button;
+import android.widget.TextView;
+
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
@@ -10,16 +14,11 @@ import com.carlitos.Pronacej.FiltrosCjdr.FiltroEdadCjdr;
 import com.carlitos.Pronacej.FiltrosCjdr.FiltroEducativaCjdr;
 import com.carlitos.Pronacej.FiltrosCjdr.FiltroInfraccionCjdr;
 import com.carlitos.Pronacej.FiltrosCjdr.FiltroLaboralCjdr;
-import com.carlitos.Pronacej.FiltrosCjdr.FiltroPoblacionCjdr;
-import com.carlitos.Pronacej.FiltrosCjdr.FiltroSimpleCjdr;
-import com.carlitos.Pronacej.FiltrosCjdr.FiltroTratamientoCjdr;
-import com.carlitos.Pronacej.FiltrosSoa.FiltroSimpleSoa;
 import com.carlitos.Pronacej.OpcionesCjdr.PoblacionCjdrActivity;
-import com.carlitos.Pronacej.OpcionesCjdr.InfraccionesCometidasCjdrActivity;
-import com.carlitos.Pronacej.OpcionesCjdr.InsercionLaboralCjdrActivity;
 import com.carlitos.Pronacej.OpcionesCjdr.TratamientoDiferenciadoCjdrActivity;
-import com.carlitos.Pronacej.OpcionesCjdr.InsercionEducativaCjdrActivity;
 import com.carlitos.Pronacej.R;
+
+;
 
 public class MenuCjdrActivity extends AppCompatActivity {
 
@@ -35,6 +34,32 @@ public class MenuCjdrActivity extends AppCompatActivity {
         ConstraintLayout opcionCuatro = findViewById(R.id.Opcion4);
         ConstraintLayout opcionCinco = findViewById(R.id.Opcion5);
 
+        Button ButtonBack = findViewById(R.id.buttonBack);
+        Button ButtonHome = findViewById(R.id.buttonHome);
+
+        ButtonHome.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intentHome = new Intent(MenuCjdrActivity.this, CategoriaMenu.class);
+                startActivity(intentHome);
+            }
+
+        });
+        ButtonBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onBackPressed(); // Llamar al método onBackPressed para ir atrás
+            }
+        });
+
+        // Recuperar el nombre del usuario desde SharedPreferences
+        SharedPreferences sharedPreferences = getSharedPreferences("UserPrefs", MODE_PRIVATE);
+        String userName = sharedPreferences.getString("userName", "Usuario");
+
+        // Actualizar todos los TextView4 con el nombre del usuario
+        TextView textView4 = findViewById(R.id.textView4);
+        textView4.setText("Bienvenido\n" + userName);
+
 
 
         // Eventos que abrirá las otras actividades
@@ -49,7 +74,7 @@ public class MenuCjdrActivity extends AppCompatActivity {
         opcionDos.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(MenuCjdrActivity.this, FiltroTratamientoCjdr.class);
+                Intent intent = new Intent(MenuCjdrActivity.this, TratamientoDiferenciadoCjdrActivity.class);
                 startActivity(intent);
             }
         });
@@ -81,7 +106,7 @@ public class MenuCjdrActivity extends AppCompatActivity {
         opcionOcho.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(MenuCjdrActivity.this, FiltroSimpleCjdr.class);
+                Intent intent = new Intent(MenuCjdrActivity.this, PoblacionCjdrActivity.class);
                 startActivity(intent);
             }
         });

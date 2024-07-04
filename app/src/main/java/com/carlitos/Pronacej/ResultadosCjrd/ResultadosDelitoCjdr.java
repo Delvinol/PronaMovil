@@ -2,19 +2,25 @@ package com.carlitos.Pronacej.ResultadosCjrd;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.carlitos.Pronacej.ActivitysPadres.CategoriaMenu;
 import com.carlitos.Pronacej.R;
-import com.github.mikephil.charting.charts.BarChart;
+import com.github.mikephil.charting.charts.HorizontalBarChart;
 import com.github.mikephil.charting.components.Legend;
 import com.github.mikephil.charting.components.XAxis;
+import com.github.mikephil.charting.components.YAxis;
 import com.github.mikephil.charting.data.BarData;
 import com.github.mikephil.charting.data.BarDataSet;
 import com.github.mikephil.charting.data.BarEntry;
 import com.github.mikephil.charting.formatter.IndexAxisValueFormatter;
+import com.github.mikephil.charting.formatter.ValueFormatter;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -35,6 +41,24 @@ public class ResultadosDelitoCjdr extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.resultado_delito_cjdr);
+
+        Button ButtonBack = findViewById(R.id.buttonBack);
+        Button ButtonHome = findViewById(R.id.buttonHome);
+
+        ButtonHome.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intentHome = new Intent(ResultadosDelitoCjdr.this, CategoriaMenu.class);
+                startActivity(intentHome);
+            }
+        });
+
+        ButtonBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onBackPressed();
+            }
+        });
 
         // Obtener los valores de los delitos específicos desde el intent
         Intent intent = getIntent();
@@ -65,79 +89,54 @@ public class ResultadosDelitoCjdr extends AppCompatActivity {
         double porcentajeSicariato = (double) sicariato / totalDelitos * 100;
         double porcentajeOtros = (double) otros / totalDelitos * 100;
 
-        // Construir el texto
-        String texto = String.format("Autoaborto: %d personas (%.2f%%) " +
-                        "Exposición al Peligro: %d personas (%.2f%%) " +
-                        "Feminicidio: %d personas (%.2f%%) " +
-                        "Homicidio Calificado: %d personas (%.2f%%) " +
-                        "Homicidio Simple: %d personas (%.2f%%) " +
-                        "Lesiones Graves: %d personas (%.2f%%) " +
-                        "Lesiones Leves: %d personas (%.2f%%) " +
-                        "Parricidio: %d personas (%.2f%%) " +
-                        "Sicariato: %d personas (%.2f%%) " +
-                        "Otros: %d personas (%.2f%%)",
-                autoaborto, porcentajeAutoaborto,
-                exposicion_peligro, porcentajeExposicionPeligro,
-                feminicidio, porcentajeFeminicidio,
-                homicidio_c, porcentajeHomicidioC,
-                homicidio_s, porcentajeHomicidioS,
-                lesiones_g, porcentajeLesionesG,
-                lesiones_l, porcentajeLesionesL,
-                parricidio, porcentajeParricidio,
-                sicariato, porcentajeSicariato,
-                otros, porcentajeOtros);
-
-        ((TextView) findViewById(R.id.textViewAlfonsoUgartePorcentaje)).setText(String.format("%.2f%%", porcentajeAutoaborto));
+        // Configurar los TextView para mostrar los números
+        ((TextView) findViewById(R.id.textViewAlfonsoUgartePorcentaje)).setText(String.valueOf(autoaborto));
         ((TextView) findViewById(R.id.textViewAlfonso_Ugarte)).setText("Autoaborto");
 
-        ((TextView) findViewById(R.id.textViewMarcavallePorcentaje)).setText(String.format("%.2f%%", porcentajeExposicionPeligro));
+        ((TextView) findViewById(R.id.textViewMarcavallePorcentaje)).setText(String.valueOf(exposicion_peligro));
         ((TextView) findViewById(R.id.textViewMarcavalle)).setText("Exposición al Peligro");
 
-        ((TextView) findViewById(R.id.textViewPucallpaPorcentaje)).setText(String.format("%.2f%%", porcentajeFeminicidio));
+        ((TextView) findViewById(R.id.textViewPucallpaPorcentaje)).setText(String.valueOf(feminicidio));
         ((TextView) findViewById(R.id.textViewPucallpa)).setText("Feminicidio");
 
-        ((TextView) findViewById(R.id.textViewEl_TamboPorcentaje)).setText(String.format("%.2f%%", porcentajeHomicidioC));
+        ((TextView) findViewById(R.id.textViewEl_TamboPorcentaje)).setText(String.valueOf(homicidio_c));
         ((TextView) findViewById(R.id.textViewEl_Tambo)).setText("Homicidio Calificado");
 
-        ((TextView) findViewById(R.id.textViewTrujilloPorcentaje)).setText(String.format("%.2f%%", porcentajeHomicidioS));
+        ((TextView) findViewById(R.id.textViewTrujilloPorcentaje)).setText(String.valueOf(homicidio_s));
         ((TextView) findViewById(R.id.textViewTrujillo)).setText("Homicidio Simple");
 
-        ((TextView) findViewById(R.id.textViewJose_QuinonesPorcentaje)).setText(String.format("%.2f%%", porcentajeLesionesG));
+        ((TextView) findViewById(R.id.textViewJose_QuinonesPorcentaje)).setText(String.valueOf(lesiones_g));
         ((TextView) findViewById(R.id.textViewJose_Quinones)).setText("Lesiones Graves");
 
-        ((TextView) findViewById(R.id.textViewMiguel_GrauPorcentaje)).setText(String.format("%.2f%%", porcentajeLesionesL));
+        ((TextView) findViewById(R.id.textViewMiguel_GrauPorcentaje)).setText(String.valueOf(lesiones_l));
         ((TextView) findViewById(R.id.textViewMiguel_Grau)).setText("Lesiones Leves");
 
-        ((TextView) findViewById(R.id.textViewSanta_MargaritaPorcentaje)).setText(String.format("%.2f%%", porcentajeParricidio));
+        ((TextView) findViewById(R.id.textViewSanta_MargaritaPorcentaje)).setText(String.valueOf(parricidio));
         ((TextView) findViewById(R.id.textViewSanta_Margarita)).setText("Parricidio");
 
-        ((TextView) findViewById(R.id.textViewAnexoIIIPorcentaje)).setText(String.format("%.2f%%", porcentajeSicariato));
+        ((TextView) findViewById(R.id.textViewAnexoIIIPorcentaje)).setText(String.valueOf(sicariato));
         ((TextView) findViewById(R.id.textViewAnexoIII)).setText("Sicariato");
-        ((TextView) findViewById(R.id.textViewLimaPorcentaje)).setText(String.format("%.2f%%", porcentajeOtros));
+
+        ((TextView) findViewById(R.id.textViewLimaPorcentaje)).setText(String.valueOf(otros));
         ((TextView) findViewById(R.id.textViewLima)).setText("Otros");
 
-
-        // Mostrar el texto en el TextView
-        TextView textView28 = findViewById(R.id.textView28);
-        textView28.setText(texto);
-
-        // Configurar el gráfico de barras
-        BarChart barChart = findViewById(R.id.barChart);
+        // Configurar el gráfico de barras horizontales
+        HorizontalBarChart barChart = findViewById(R.id.barChart);
         barChart.getDescription().setEnabled(false);
         barChart.setDrawGridBackground(false);
 
-        // Configurar los datos para el gráfico
+        // Configurar los datos para el gráfico en porcentaje
         List<BarEntry> entries = new ArrayList<>();
-        entries.add(new BarEntry(0, autoaborto));
-        entries.add(new BarEntry(1, exposicion_peligro));
-        entries.add(new BarEntry(2, feminicidio));
-        entries.add(new BarEntry(3, homicidio_c));
-        entries.add(new BarEntry(4, homicidio_s));
-        entries.add(new BarEntry(5, lesiones_g));
-        entries.add(new BarEntry(6, lesiones_l));
-        entries.add(new BarEntry(7, parricidio));
-        entries.add(new BarEntry(8, sicariato));
-        entries.add(new BarEntry(9, otros));
+        entries.add(new BarEntry(0, (float) porcentajeAutoaborto));
+        entries.add(new BarEntry(1, (float) porcentajeExposicionPeligro));
+        entries.add(new BarEntry(2, (float) porcentajeFeminicidio));
+        entries.add(new BarEntry(3, (float) porcentajeHomicidioC));
+        entries.add(new BarEntry(4, (float) porcentajeHomicidioS));
+        entries.add(new BarEntry(5, (float) porcentajeLesionesG));
+        entries.add(new BarEntry(6, (float) porcentajeLesionesL));
+        entries.add(new BarEntry(7, (float) porcentajeParricidio));
+        entries.add(new BarEntry(8, (float) porcentajeSicariato));
+        entries.add(new BarEntry(9, (float) porcentajeOtros));
 
         ArrayList<Integer> colors = new ArrayList<>();
         colors.add(getResources().getColor(R.color.Pronacej1));
@@ -151,31 +150,52 @@ public class ResultadosDelitoCjdr extends AppCompatActivity {
         colors.add(getResources().getColor(R.color.Pronacej9));
         colors.add(getResources().getColor(R.color.Pronacej10));
 
-        BarDataSet barDataSet = new BarDataSet(entries, "Lista de Delitos Específicos");
-        barDataSet.setColors(colors);
-        barDataSet.setValueTextSize(12f);
+        BarDataSet dataSet = new BarDataSet(entries, "Delitos");
+        dataSet.setColors(colors);
+        BarData data = new BarData(dataSet);
+        data.setBarWidth(0.9f); // Ancho de las barras
+        data.setValueTextSize(14f); // Aumenta el tamaño del texto
 
-        BarData barData = new BarData(barDataSet);
-        barData.setBarWidth(0.5f);
+        // Nuevo formateador personalizado
+        data.setValueFormatter(new ValueFormatter() {
+            private DecimalFormat mFormat = new DecimalFormat("0.0");
+            @Override
+            public String getFormattedValue(float value) {
+                return mFormat.format(value) + "%";
+            }
+        });
 
-        // Configurar ejes y leyenda
+        barChart.setData(data);
+        barChart.setFitBars(true);
+
+        // Configurar el eje X
         XAxis xAxis = barChart.getXAxis();
         xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
         xAxis.setDrawGridLines(false);
         xAxis.setValueFormatter(new IndexAxisValueFormatter(new String[]{
-                "Autoaborto", "Exposición Peligro", "Feminicidio", "Homicidio C",
-                "Homicidio S", "Lesiones G", "Lesiones L", "Parricidio",
-                "Sicariato", "Otros"}));
+                "Autoaborto", "Exposición al Peligro", "Feminicidio", "Homicidio Calificado",
+                "Homicidio Simple", "Lesiones Graves", "Lesiones Leves", "Parricidio",
+                "Sicariato", "Otros"
+        }));
+        xAxis.setGranularity(1f);
+        xAxis.setGranularityEnabled(true);
+        xAxis.setLabelCount(10);
+
+        // Configurar el eje Y (izquierda y derecha)
+        YAxis yAxisLeft = barChart.getAxisLeft();
+        yAxisLeft.setDrawGridLines(false);
+        yAxisLeft.setGranularity(1f);
+        yAxisLeft.setAxisMinimum(0f);
+
+        YAxis yAxisRight = barChart.getAxisRight();
+        yAxisRight.setEnabled(false);
 
         Legend legend = barChart.getLegend();
-        legend.setWordWrapEnabled(true);
         legend.setVerticalAlignment(Legend.LegendVerticalAlignment.BOTTOM);
-        legend.setHorizontalAlignment(Legend.LegendHorizontalAlignment.CENTER);
+        legend.setHorizontalAlignment(Legend.LegendHorizontalAlignment.LEFT);
         legend.setOrientation(Legend.LegendOrientation.HORIZONTAL);
         legend.setDrawInside(false);
 
-        // Establecer los datos en el gráfico
-        barChart.setData(barData);
-        barChart.invalidate();
+        barChart.invalidate(); // refrescar el gráfico
     }
 }

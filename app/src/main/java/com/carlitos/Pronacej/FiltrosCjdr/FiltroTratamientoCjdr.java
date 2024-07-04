@@ -4,7 +4,6 @@ import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -15,8 +14,7 @@ import android.widget.TextView;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.carlitos.Pronacej.OpcionesCjdr.InfraccionesCometidasCjdrActivity;
-import com.carlitos.Pronacej.OpcionesCjdr.PoblacionCjdrActivity;
+import com.carlitos.Pronacej.ActivitysPadres.CategoriaMenu;
 import com.carlitos.Pronacej.OpcionesCjdr.TratamientoDiferenciadoCjdrActivity;
 import com.carlitos.Pronacej.R;
 import com.carlitos.Pronacej.Utils.Apis;
@@ -39,6 +37,11 @@ public class FiltroTratamientoCjdr extends AppCompatActivity {
     private int participa_programa_cuatro;
     private int participa_programa_cinco;
     private int participa_programa_no;
+    private int programa_uno;
+    private int programa_dos;
+    private int programa_tres;
+    private int programa_cuatro;
+    private int programa_no_aplica;
     private int justicia_si;
     private int justicia_no;
     private int agresor_si;
@@ -47,8 +50,8 @@ public class FiltroTratamientoCjdr extends AppCompatActivity {
     private int salud_no;
     private int adn_si;
     private int adn_no;
-    private int intervencion_aplica;
-    private int intervencion_no_aplica;
+    private int comunidad_si;
+    private int comunidad_no;
     private int firmes_aplica;
     private int firmes_no_aplica;
 
@@ -95,6 +98,24 @@ public class FiltroTratamientoCjdr extends AppCompatActivity {
         });
         setupCheckBoxListeners();
 
+        Button ButtonBack = findViewById(R.id.buttonBack);
+        Button ButtonHome = findViewById(R.id.buttonHome);
+
+        ButtonHome.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intentHome = new Intent(FiltroTratamientoCjdr.this, CategoriaMenu.class);
+                startActivity(intentHome);
+            }
+
+        });
+        ButtonBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onBackPressed(); // Llamar al método onBackPressed para ir atrás
+            }
+        });
+
     }
 
     private void setupCheckBoxListeners() {
@@ -132,6 +153,11 @@ public class FiltroTratamientoCjdr extends AppCompatActivity {
                         participa_programa_cuatro = getIntValue(firstElement, "participa_programa_cuatro");
                         participa_programa_cinco = getIntValue(firstElement, "participa_programa_cinco");
                         participa_programa_no = getIntValue(firstElement, "participa_programa_no");
+                        programa_uno = getIntValue(firstElement, "programa_uno");
+                        programa_dos = getIntValue(firstElement, "programa_dos");
+                        programa_tres = getIntValue(firstElement, "programa_tres");
+                        programa_cuatro = getIntValue(firstElement, "programa_cuatro");
+                        programa_no_aplica = getIntValue(firstElement, "programa_no_aplica");
                         justicia_si = getIntValue(firstElement, "justicia_si");
                         justicia_no = getIntValue(firstElement, "justicia_no");
                         agresor_si = getIntValue(firstElement, "agresor_si");
@@ -140,8 +166,8 @@ public class FiltroTratamientoCjdr extends AppCompatActivity {
                         salud_no = getIntValue(firstElement, "salud_no");
                         adn_si = getIntValue(firstElement, "adn_si");
                         adn_no = getIntValue(firstElement, "adn_no");
-                        intervencion_aplica = getIntValue(firstElement, "intervencion_aplica");
-                        intervencion_no_aplica = getIntValue(firstElement, "intervencion_no_aplica");
+                        comunidad_no = getIntValue(firstElement, "comunidad_no");
+                        comunidad_si = getIntValue(firstElement, "comunidad_si");
                         firmes_aplica = getIntValue(firstElement, "firmes_aplica");
                         firmes_no_aplica = getIntValue(firstElement, "firmes_no_aplica");
 
@@ -153,6 +179,11 @@ public class FiltroTratamientoCjdr extends AppCompatActivity {
                         intent.putExtra("participa_programa_cuatro", participa_programa_cuatro);
                         intent.putExtra("participa_programa_cinco", participa_programa_cinco);
                         intent.putExtra("participa_programa_no", participa_programa_no);
+                        intent.putExtra("programa_uno", programa_uno);
+                        intent.putExtra("programa_dos", programa_dos);
+                        intent.putExtra("programa_tres", programa_tres);
+                        intent.putExtra("programa_cuatro", programa_cuatro);
+                        intent.putExtra("programa_no_aplica", programa_no_aplica);
                         intent.putExtra("justicia_si", justicia_si);
                         intent.putExtra("justicia_no", justicia_no);
                         intent.putExtra("agresor_si", agresor_si);
@@ -161,8 +192,8 @@ public class FiltroTratamientoCjdr extends AppCompatActivity {
                         intent.putExtra("salud_no", salud_no);
                         intent.putExtra("adn_si", adn_si);
                         intent.putExtra("adn_no", adn_no);
-                        intent.putExtra("intervencion_aplica", intervencion_aplica);
-                        intent.putExtra("intervencion_no_aplica", intervencion_no_aplica);
+                        intent.putExtra("comunidad_no", comunidad_no);
+                        intent.putExtra("comunidad_si", comunidad_si);
                         intent.putExtra("firmes_aplica", firmes_aplica);
                         intent.putExtra("ingresoProcesado", firmes_no_aplica);
 
@@ -241,6 +272,10 @@ public class FiltroTratamientoCjdr extends AppCompatActivity {
     public void openDatePicker(View view) {
         datePickerDialog.show();
     }
+    public void openDatePickerInicio(View view) {
+        datePickerDialog.show();
+    }
+
 
     public String showSelectedDate(View view) {
         String[] dateParts = selectedDate.split(" ");

@@ -14,8 +14,9 @@ import android.widget.TextView;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.carlitos.Pronacej.OpcionesCjdr.InfraccionesCometidasCjdrActivity;
+import com.carlitos.Pronacej.ActivitysPadres.CategoriaMenu;
 import com.carlitos.Pronacej.R;
+import com.carlitos.Pronacej.ResultadosCjrd.ResultadosDelitoCjdr;
 import com.carlitos.Pronacej.Utils.Apis;
 import com.carlitos.Pronacej.Utils.CjdrService;
 
@@ -87,6 +88,24 @@ public class FiltroInfraccionCjdr extends AppCompatActivity {
             }
         });
         setupCheckBoxListeners();
+
+        Button ButtonBack = findViewById(R.id.buttonBack);
+        Button ButtonHome = findViewById(R.id.buttonHome);
+
+        ButtonHome.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intentHome = new Intent(FiltroInfraccionCjdr.this, CategoriaMenu.class);
+                startActivity(intentHome);
+            }
+
+        });
+        ButtonBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onBackPressed(); // Llamar al método onBackPressed para ir atrás
+            }
+        });
     }
 
     private void setupCheckBoxListeners() {
@@ -135,7 +154,7 @@ public class FiltroInfraccionCjdr extends AppCompatActivity {
                         ingreso_procesado = getIntValue(firstElement, "ingreso_procesado");
 
                         // Crear el Intent y añadir los extras
-                        Intent intent = new Intent(FiltroInfraccionCjdr.this, InfraccionesCometidasCjdrActivity.class);
+                        Intent intent = new Intent(FiltroInfraccionCjdr.this, ResultadosDelitoCjdr.class);
                         intent.putExtra("autoaborto", autoaborto);
                         intent.putExtra("exposicion_peligro", exposicion_peligro);
                         intent.putExtra("feminicidio", feminicidio);
@@ -225,6 +244,11 @@ public class FiltroInfraccionCjdr extends AppCompatActivity {
     public void openDatePicker(View view) {
         datePickerDialog.show();
     }
+    public void openDatePickerInicio(View view) {
+        datePickerDialog.show();
+    }
+
+
 
     public String showSelectedDate(View view) {
         String[] dateParts = selectedDate.split(" ");

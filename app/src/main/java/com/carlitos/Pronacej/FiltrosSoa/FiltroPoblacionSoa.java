@@ -15,12 +15,10 @@ import android.widget.TextView;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.carlitos.Pronacej.FiltrosCjdr.FiltroPoblacionCjdr;
-import com.carlitos.Pronacej.OpcionesCjdr.PoblacionCjdrActivity;
+import com.carlitos.Pronacej.ActivitysPadres.CategoriaMenu;
 import com.carlitos.Pronacej.OpcionesSoa.PoblacionSoaActivity;
 import com.carlitos.Pronacej.R;
 import com.carlitos.Pronacej.Utils.Apis;
-import com.carlitos.Pronacej.Utils.CjdrService;
 import com.carlitos.Pronacej.Utils.SoaService;
 
 import java.util.Calendar;
@@ -91,6 +89,24 @@ public class FiltroPoblacionSoa extends AppCompatActivity {
             }
         });
         setupCheckBoxListeners();
+
+        Button ButtonBack = findViewById(R.id.buttonBack);
+        Button ButtonHome = findViewById(R.id.buttonHome);
+
+        ButtonHome.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intentHome = new Intent(FiltroPoblacionSoa.this, CategoriaMenu.class);
+                startActivity(intentHome);
+            }
+
+        });
+        ButtonBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onBackPressed(); // Llamar al método onBackPressed para ir atrás
+            }
+        });
 
     }
     private void setupCheckBoxListeners() {
@@ -234,6 +250,10 @@ public class FiltroPoblacionSoa extends AppCompatActivity {
     public void openDatePicker(View view) {
         datePickerDialog.show();
     }
+    public void openDatePickerInicio(View view) {
+        datePickerDialog.show();
+    }
+
 
     public String showSelectedDate(View view) {
         String[] dateParts = selectedDate.split(" ");

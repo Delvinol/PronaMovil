@@ -1,19 +1,21 @@
 package com.carlitos.Pronacej.ResultadosCjrd;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.carlitos.Pronacej.ActivitysPadres.CategoriaMenu;
 import com.carlitos.Pronacej.R;
-import com.github.mikephil.charting.charts.BarChart;
+import com.github.mikephil.charting.charts.PieChart;
 import com.github.mikephil.charting.components.Legend;
-import com.github.mikephil.charting.components.XAxis;
-import com.github.mikephil.charting.data.BarData;
-import com.github.mikephil.charting.data.BarDataSet;
-import com.github.mikephil.charting.data.BarEntry;
-import com.github.mikephil.charting.formatter.ValueFormatter;
+import com.github.mikephil.charting.data.PieData;
+import com.github.mikephil.charting.data.PieDataSet;
+import com.github.mikephil.charting.data.PieEntry;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,6 +29,24 @@ public class ResultadoAgresoresSexualesCjdr extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.resultado_agresores_sexuales_cjdr);
+
+        Button ButtonBack = findViewById(R.id.buttonBack);
+        Button ButtonHome = findViewById(R.id.buttonHome);
+
+        ButtonHome.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intentHome = new Intent(ResultadoAgresoresSexualesCjdr.this, CategoriaMenu.class);
+                startActivity(intentHome);
+            }
+
+        });
+        ButtonBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onBackPressed(); // Llamar al método onBackPressed para ir atrás
+            }
+        });
         TextView txtSummary = findViewById(R.id.textView28);
         TextView txtPorcentajeSi = findViewById(R.id.textView13);
         TextView txtMensajeSi = findViewById(R.id.textView7);
@@ -45,10 +65,10 @@ public class ResultadoAgresoresSexualesCjdr extends AppCompatActivity {
         double porcentajeAgresorNo = (total != 0) ? (agresor_no * 100.0 / total) : 0;
 
         // Configurar los textos de los TextView
-        txtPorcentajeSi.setText(String.format("%.0f%%", porcentajeAgresorSi));
-        txtMensajeSi.setText(String.format("Agresor; %d personas", agresor_si));
-        txtPorcentajeNo.setText(String.format("%.0f%%", porcentajeAgresorNo));
-        txtMensajeNo.setText(String.format("No Agresor; %d personas", agresor_no));
+        txtPorcentajeSi.setText(String.format("%d", agresor_si));
+        txtMensajeSi.setText(String.format("Participan"));
+        txtPorcentajeNo.setText(String.format("%d", agresor_no));
+        txtMensajeNo.setText(String.format("No participan"));
 
         // Configurar el mensaje en el TextView de resumen
         String summaryText = String.format(
@@ -57,36 +77,29 @@ public class ResultadoAgresoresSexualesCjdr extends AppCompatActivity {
         );
         txtSummary.setText(summaryText);
 
-        // Configurar el gráfico de barras
-        BarChart barChart = findViewById(R.id.barChart);
-        barChart.getDescription().setEnabled(false);
+        // Configurar el gráfico pastel
+        PieChart pieChart = findViewById(R.id.pieChart);
+        pieChart.getDescription().setEnabled(false);
 
-        // Crear las entradas para el gráfico de barras
-        List<BarEntry> entries = new ArrayList<>();
-        entries.add(new BarEntry(0, agresor_si));
-        entries.add(new BarEntry(1, agresor_no));
+        // Crear las entradas para el gráfico pastel
+        List<PieEntry> entries = new ArrayList<>();
+        entries.add(new PieEntry((float) porcentajeAgresorSi, "Participan"));
+        entries.add(new PieEntry((float) porcentajeAgresorNo, "No participan"));
 
-        // Configurar los colores para las barras
+        // Configurar los colores para las secciones del gráfico pastel
         int[] colors = {
                 getResources().getColor(android.R.color.holo_red_light),  // Agresor
-                getResources().getColor(android.R.color.holo_green_light)     // No Agresor
+                getResources().getColor(android.R.color.holo_green_light) // No Agresor
         };
 
-        // Crear el conjunto de datos del gráfico de barras
-        BarDataSet dataSet = new BarDataSet(entries, "");
+        // Crear el conjunto de datos del gráfico pastel
+        PieDataSet dataSet = new PieDataSet(entries, "");
         dataSet.setColors(colors);
         dataSet.setValueTextSize(12f);
-
-        // Configurar el eje X
-        XAxis xAxis = barChart.getXAxis();
-        xAxis.setValueFormatter(new XAxisFormatter());
-        xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
-        xAxis.setDrawGridLines(false);
-        xAxis.setGranularity(1f);
-        xAxis.setLabelCount(2);
+        dataSet.setValueFormatter(new PercentValueFormatter());
 
         // Configurar la leyenda
-        Legend legend = barChart.getLegend();
+        Legend legend = pieChart.getLegend();
         legend.setEnabled(true); // Habilitar la leyenda
         legend.setForm(Legend.LegendForm.SQUARE);
         legend.setTextSize(12f);
@@ -96,21 +109,15 @@ public class ResultadoAgresoresSexualesCjdr extends AppCompatActivity {
         legend.setOrientation(Legend.LegendOrientation.HORIZONTAL);
         legend.setDrawInside(false);
 
-        // Agregar los datos al gráfico de barras
-        BarData data = new BarData(dataSet);
-        barChart.setData(data);
-        barChart.invalidate(); // Refrescar el gráfico
+        // Agregar los datos al gráfico pastel
+        PieData data = new PieData(dataSet);
+        pieChart.setData(data);
+        pieChart.invalidate(); // Refrescar el gráfico
     }
 
-    private class XAxisFormatter extends ValueFormatter {
-        @Override
+    public class PercentValueFormatter extends com.github.mikephil.charting.formatter.ValueFormatter {
         public String getFormattedValue(float value) {
-            int intValue = Math.round(value);
-            if (intValue == 0) {
-                return "Agresor";
-            } else {
-                return "No Agresor";
-            }
+            return String.format("%.1f%%", value);
         }
     }
 }

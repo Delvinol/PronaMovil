@@ -2,25 +2,25 @@ package com.carlitos.Pronacej.ResultadosCjrd;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 
+import com.carlitos.Pronacej.ActivitysPadres.CategoriaMenu;
 import com.carlitos.Pronacej.R;
 import com.github.mikephil.charting.charts.HorizontalBarChart;
-import com.github.mikephil.charting.charts.PieChart;
+import com.github.mikephil.charting.components.XAxis;
+import com.github.mikephil.charting.components.YAxis;
 import com.github.mikephil.charting.data.BarData;
 import com.github.mikephil.charting.data.BarDataSet;
 import com.github.mikephil.charting.data.BarEntry;
-import com.github.mikephil.charting.data.PieData;
-import com.github.mikephil.charting.data.PieDataSet;
-import com.github.mikephil.charting.data.PieEntry;
 import com.github.mikephil.charting.formatter.ValueFormatter;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 
 public class ResultadosEstadoCivilCjdr extends AppCompatActivity {
 
@@ -33,6 +33,24 @@ public class ResultadosEstadoCivilCjdr extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.resultado_estado_civil_cjdr);
+
+        Button ButtonBack = findViewById(R.id.buttonBack);
+        Button ButtonHome = findViewById(R.id.buttonHome);
+
+        ButtonHome.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intentHome = new Intent(ResultadosEstadoCivilCjdr.this, CategoriaMenu.class);
+                startActivity(intentHome);
+            }
+        });
+
+        ButtonBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onBackPressed(); // Llamar al método onBackPressed para ir atrás
+            }
+        });
 
         barChart = findViewById(R.id.barChart);
 
@@ -87,11 +105,15 @@ public class ResultadosEstadoCivilCjdr extends AppCompatActivity {
             float mayores = parseFloat(data.get("mayores_cjdr"));
             float menores = parseFloat(data.get("menores_cjdr"));
             float total = mayores + menores;
-            float porcentajeMayores = (mayores / totalMayores) * 100;
-            float porcentajeMenores = (menores / totalMenores) * 100;
 
-            entries.add(new BarEntry(i, new float[]{mayores, menores}));
-            textViewsPorcentaje[i].setText(String.format("Mayores: %.2f%%, Menores: %.2f%%", porcentajeMayores, porcentajeMenores));
+            float porcentajeMayores = (mayores / total) * 100;
+            float porcentajeMenores = (menores / total) * 100;
+
+            // Crear una entrada para cada centro_cjdr con los porcentajes de mayores y menores
+            entries.add(new BarEntry(i, new float[]{porcentajeMayores, porcentajeMenores}));
+
+            // Asignar texto a los TextView de porcentajes y nombres
+            textViewsPorcentaje[i].setText(String.format("Mayores: %.0f,\n Menores: %.0f", mayores, menores));
             textViewsNombre[i].setText(data.get("centro_cjdr"));
         }
 
@@ -99,13 +121,20 @@ public class ResultadosEstadoCivilCjdr extends AppCompatActivity {
         colors.add(ContextCompat.getColor(this, R.color.Pronacej10));
         colors.add(ContextCompat.getColor(this, R.color.Pronacej9));
 
-
-        // Crear el conjunto de datos para el gráfico de barras
-        BarDataSet dataSet = new BarDataSet(entries, "Centro Juvenil");
-        dataSet.setColors(colors);
+        // Crear los conjuntos de datos para el gráfico de barras
+        BarDataSet dataSet = new BarDataSet(entries, "");
+        dataSet.setColors(getColors()); // Colores para cada conjunto de barras
         dataSet.setValueTextSize(12f);
         dataSet.setValueTextColor(ContextCompat.getColor(this, R.color.black));
-        dataSet.setStackLabels(new String[]{"Mayores", "Menores"});
+        dataSet.setStackLabels(new String[]{"Mayores", "Menores"}); // Etiquetas para las partes apiladas
+
+        // Asigna el ValueFormatter al dataSet para mostrar porcentajes
+        dataSet.setValueFormatter(new ValueFormatter() {
+            @Override
+            public String getFormattedValue(float value) {
+                return String.format("%.1f%%", value); // Mostrar porcentajes en las barras
+            }
+        });
 
         // Crear los datos del gráfico de barras
         BarData barData = new BarData(dataSet);
@@ -117,19 +146,30 @@ public class ResultadosEstadoCivilCjdr extends AppCompatActivity {
         // Configurar descripción del gráfico
         barChart.getDescription().setEnabled(false);
 
+        // Añadir margen adicional a la izquierda y derecha del gráfico
+        barChart.setExtraLeftOffset(10f); // Ajusta el valor según sea necesario
+        barChart.setExtraRightOffset(50f); // Añadir margen derecho
+
         // Configurar el eje X
-        barChart.getXAxis().setValueFormatter(new ValueFormatter() {
+        XAxis xAxis = barChart.getXAxis();
+        xAxis.setValueFormatter(new ValueFormatter() {
             @Override
             public String getFormattedValue(float value) {
                 return reportData.get((int) value).get("centro_cjdr");
             }
         });
-        barChart.getXAxis().setGranularity(1f);
-        barChart.getXAxis().setGranularityEnabled(true);
+        xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
+        xAxis.setGranularity(1f);
+        xAxis.setGranularityEnabled(true);
+        xAxis.setLabelCount(reportData.size());
+        xAxis.setLabelRotationAngle(0);  // Cambia el ángulo de rotación a 0 para que las etiquetas estén en horizontal
 
-        // Configurar el eje Y
-        barChart.getAxisLeft().setGranularity(1f);
-        barChart.getAxisRight().setEnabled(false);
+        YAxis yAxisLeft = barChart.getAxisLeft();
+        yAxisLeft.setGranularity(1f);
+        yAxisLeft.setAxisMinimum(0f);
+
+        YAxis yAxisRight = barChart.getAxisRight();
+        yAxisRight.setEnabled(false);
 
         // Establecer los datos en el gráfico y refrescar
         barChart.setData(barData);
@@ -142,5 +182,13 @@ public class ResultadosEstadoCivilCjdr extends AppCompatActivity {
         } catch (NumberFormatException e) {
             return 0;
         }
+    }
+
+    // Método para obtener los colores de las barras
+    private ArrayList<Integer> getColors() {
+        ArrayList<Integer> colors = new ArrayList<>();
+        colors.add(ContextCompat.getColor(this, R.color.Pronacej10)); // Color para mayores
+        colors.add(ContextCompat.getColor(this, R.color.Pronacej9));  // Color para menores
+        return colors;
     }
 }

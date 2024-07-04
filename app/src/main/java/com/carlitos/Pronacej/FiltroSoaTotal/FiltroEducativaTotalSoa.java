@@ -14,9 +14,11 @@ import android.widget.TextView;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.carlitos.Pronacej.ActivitysPadres.CategoriaMenu;
 import com.carlitos.Pronacej.FiltroCjdrTotal.FiltroEducativaTotalCjdr;
 import com.carlitos.Pronacej.OpcionesCjdr.InsercionEducativaCjdrActivity;
 import com.carlitos.Pronacej.OpcionesSoa.InsercionEducativaSoaActivity;
+import com.carlitos.Pronacej.OpcionesSoa.PoblacionSoaActivity;
 import com.carlitos.Pronacej.R;
 import com.carlitos.Pronacej.Utils.Apis;
 import com.carlitos.Pronacej.Utils.CjdrService;
@@ -100,6 +102,25 @@ public class FiltroEducativaTotalSoa extends AppCompatActivity {
             }
         });
         setupCheckBoxListeners();
+
+
+        Button ButtonBack = findViewById(R.id.buttonBack);
+        Button ButtonHome = findViewById(R.id.buttonHome);
+
+        ButtonHome.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intentHome = new Intent(FiltroEducativaTotalSoa.this, CategoriaMenu.class);
+                startActivity(intentHome);
+            }
+
+        });
+        ButtonBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onBackPressed(); // Llamar al método onBackPressed para ir atrás
+            }
+        });
     }
 
     private void setupCheckBoxListeners() {

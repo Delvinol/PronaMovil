@@ -1,107 +1,99 @@
 package com.carlitos.Pronacej.ResultadosSoa;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.carlitos.Pronacej.ActivitysPadres.CategoriaMenu;
 import com.carlitos.Pronacej.R;
-import com.github.mikephil.charting.charts.BarChart;
+import com.github.mikephil.charting.charts.PieChart;
 import com.github.mikephil.charting.components.Legend;
-import com.github.mikephil.charting.components.XAxis;
-import com.github.mikephil.charting.data.BarData;
-import com.github.mikephil.charting.data.BarDataSet;
-import com.github.mikephil.charting.data.BarEntry;
-import com.github.mikephil.charting.formatter.ValueFormatter;
+import com.github.mikephil.charting.data.PieData;
+import com.github.mikephil.charting.data.PieDataSet;
+import com.github.mikephil.charting.data.PieEntry;
+import com.github.mikephil.charting.utils.ColorTemplate;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class ResultadosSituacionLaboralActualSoa extends AppCompatActivity {
 
-    private int inser_labo_interna;
-    private int inser_labo_externa;
-    private int no_trabaja;
+    private int trabaja_si;
+    private int trabaja_no;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.resultados_situacion_laboral_soa);
 
-        // Obtener los valores de las variables desde el intent
-        inser_labo_interna = getIntent().getIntExtra("inser_labo_interna", 0);
-        inser_labo_externa = getIntent().getIntExtra("inser_labo_externa", 0);
-        no_trabaja = getIntent().getIntExtra("no_trabaja", 0);
+        Button ButtonBack = findViewById(R.id.buttonBack);
+        Button ButtonHome = findViewById(R.id.buttonHome);
 
-        int totalSLA = inser_labo_externa + inser_labo_interna + no_trabaja;
-
-        // Calcular los porcentajes
-        double porcentajeinser_labo_interna = (double) inser_labo_interna / totalSLA * 100;
-        double porcentajeinser_labo_externa = (double) inser_labo_externa / totalSLA * 100;
-        double porcentajeno_trabaja = (double) no_trabaja / totalSLA * 100;
-
-        ((TextView) findViewById(R.id.textViewinser_labo_internaPorcentaje)).setText(String.format("%.2f%%", porcentajeinser_labo_interna));
-        ((TextView) findViewById(R.id.textViewinser_labo_interna)).setText("Trabajo interno");
-
-        ((TextView) findViewById(R.id.textViewinser_labo_externaPorcentaje)).setText(String.format("%.2f%%", porcentajeinser_labo_externa));
-        ((TextView) findViewById(R.id.textViewinser_labo_externa)).setText("Trabajo externo");
-
-        ((TextView) findViewById(R.id.textViewno_trabajaPorcentaje)).setText(String.format("%.2f%%", porcentajeno_trabaja));
-        ((TextView) findViewById(R.id.textViewno_trabaja)).setText("No trabaja");
-
-        // Configurar el gráfico de barras
-        BarChart barChart = findViewById(R.id.barChart);
-        barChart.getDescription().setEnabled(false);
-
-        List<BarEntry> entries = new ArrayList<>();
-        entries.add(new BarEntry(0, inser_labo_interna));
-        entries.add(new BarEntry(1, inser_labo_externa));
-        entries.add(new BarEntry(2, no_trabaja));
-
-        ArrayList<Integer> colors = new ArrayList<>();
-        colors.add(getResources().getColor(R.color.Pronacej6));
-        colors.add(getResources().getColor(R.color.Pronacej2));
-        colors.add(getResources().getColor(R.color.Pronacej3));
-
-        BarDataSet dataSet = new BarDataSet(entries, "Situación Laboral Actual");
-        dataSet.setColors(colors);
-        dataSet.setValueTextSize(12f);
-
-        BarData barData = new BarData(dataSet);
-        barChart.setData(barData);
-        barChart.invalidate(); // Refrescar el gráfico
-
-        // Customize X axis
-        XAxis xAxis = barChart.getXAxis();
-        xAxis.setValueFormatter(new ValueFormatter() {
+        ButtonHome.setOnClickListener(new View.OnClickListener() {
             @Override
-            public String getFormattedValue(float value) {
-                switch ((int) value) {
-                    case 0:
-                        return "Interna";
-                    case 1:
-                        return "Externa";
-                    case 2:
-                        return "No Trabaja";
-                    default:
-                        return "";
-                }
+            public void onClick(View v) {
+                Intent intentHome = new Intent(ResultadosSituacionLaboralActualSoa.this, CategoriaMenu.class);
+                startActivity(intentHome);
             }
         });
 
-        xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
-        xAxis.setDrawGridLines(false);
-        xAxis.setGranularity(1f); // Intervalo mínimo entre etiquetas
-        xAxis.setLabelCount(3); // Asegura que solo haya 3 etiquetas
+        ButtonBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onBackPressed(); // Llamar al método onBackPressed para ir atrás
+            }
+        });
+
+        // Obtener los valores de las variables desde el intent
+        trabaja_si = getIntent().getIntExtra("trabaja_si", 0);
+        trabaja_no = getIntent().getIntExtra("trabaja_no", 0);
+
+        int totalSLA = trabaja_si + trabaja_no;
+
+        // Calcular los porcentajes
+        double porcentajeTrabajaSi = (double) trabaja_si / totalSLA * 100;
+        double porcentajeTrabajaNo = (double) trabaja_no / totalSLA * 100;
+
+        ((TextView) findViewById(R.id.textViewinser_labo_internaPorcentaje)).setText(String.format("%d", trabaja_si));
+        ((TextView) findViewById(R.id.textViewinser_labo_interna)).setText("Si Trabaja");
+
+        ((TextView) findViewById(R.id.textViewinser_labo_externaPorcentaje)).setText(String.format("%d", trabaja_no));
+        ((TextView) findViewById(R.id.textViewinser_labo_externa)).setText("No trabaja");
+
+        // Configurar el gráfico de pastel
+        PieChart pieChart = findViewById(R.id.pieChart);
+        pieChart.getDescription().setEnabled(false);
+
+        List<PieEntry> entries = new ArrayList<>();
+        entries.add(new PieEntry((float) porcentajeTrabajaNo, "No Trabaja"));
+        entries.add(new PieEntry((float) porcentajeTrabajaSi, "Si Trabaja"));
+
+        PieDataSet dataSet = new PieDataSet(entries, "");
+        dataSet.setColors(ColorTemplate.MATERIAL_COLORS);
+        dataSet.setValueTextSize(12f);
+        dataSet.setValueFormatter(new PercentValueFormatter());
+
+        PieData pieData = new PieData(dataSet);
+        pieChart.setData(pieData);
+        pieChart.invalidate(); // Refrescar el gráfico
 
         // Customize legend
-        Legend legend = barChart.getLegend();
+        Legend legend = pieChart.getLegend();
         legend.setEnabled(true);
         legend.setTextSize(12f);
         legend.setForm(Legend.LegendForm.SQUARE);
         legend.setFormSize(12f);
         legend.setXEntrySpace(10f);
         legend.setTextColor(getResources().getColor(R.color.black));
+    }
+    public class PercentValueFormatter extends com.github.mikephil.charting.formatter.ValueFormatter {
+        public String getFormattedValue(float value) {
+            return String.format("%.1f%%", value);
+        }
     }
 }

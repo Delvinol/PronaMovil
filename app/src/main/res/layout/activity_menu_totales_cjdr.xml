@@ -16,21 +16,38 @@
 
 
         <LinearLayout
-            android:id="@+id/linearLayout3"
-            android:layout_width="match_parent"
+            android:id="@+id/linearLayout10"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:orientation="vertical"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="24dp"
+            android:layout_marginEnd="8dp"
+            android:dividerPadding="10dp"
+            android:gravity="center"
+            android:orientation="horizontal"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
+            <LinearLayout
+                android:layout_width="50dp"
+                android:layout_height="match_parent"
+                android:layout_marginEnd="24sp"
+                android:gravity="center"
+                android:orientation="horizontal">
+
+                <Button
+                    android:id="@+id/buttonBack"
+                    android:layout_width="100dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.5"
+                    android:background="@drawable/outline_chevron_left_24"
+                    android:backgroundTint="@color/Pronacej3" />
+            </LinearLayout>
+
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginStart="24dp"
-                android:layout_marginTop="16dp"
-                android:layout_marginEnd="24dp">
+                android:layout_height="match_parent">
 
                 <ImageView
                     android:id="@+id/imageView5"
@@ -60,7 +77,6 @@
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="8dp"
                     android:fontFamily="@font/montserrat_regular"
-                    android:text="CJDR \nTotales"
                     android:textColor="#363636"
                     android:textSize="24sp"
                     app:layout_constraintBottom_toBottomOf="parent"
@@ -68,15 +84,32 @@
                     app:layout_constraintTop_toTopOf="parent" />
             </androidx.constraintlayout.widget.ConstraintLayout>
 
+            <LinearLayout
+                android:layout_width="50dp"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="24sp"
+                android:gravity="center"
+                android:orientation="horizontal">
+
+                <Button
+                    android:id="@+id/buttonHome"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.5"
+                    android:background="@drawable/baseline_home_24"
+                    android:backgroundTint="@color/Pronacej3" />
+            </LinearLayout>
+
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
             android:layout_marginBottom="16dp"
             android:orientation="vertical"
             app:layout_constraintBottom_toTopOf="@+id/linearLayout5"
-            app:layout_constraintTop_toBottomOf="@+id/linearLayout3">
+            app:layout_constraintTop_toBottomOf="@+id/linearLayout10">
 
             <TextView
                 android:id="@+id/textView16"
@@ -142,6 +175,7 @@
                         app:layout_constraintStart_toStartOf="@+id/imageView02"
                         app:layout_constraintTop_toBottomOf="@+id/imageView02" />
                 </androidx.constraintlayout.widget.ConstraintLayout>
+
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/Opcion1"
                     android:layout_width="0dp"
@@ -340,6 +374,7 @@
                         app:layout_constraintStart_toStartOf="@+id/imageView10"
                         app:layout_constraintTop_toBottomOf="@+id/imageView10" />
                 </androidx.constraintlayout.widget.ConstraintLayout>
+
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/Opcion2"
                     android:layout_width="0dp"
@@ -385,7 +420,6 @@
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
             </LinearLayout>
-
 
 
         </LinearLayout>
