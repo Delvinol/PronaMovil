@@ -185,12 +185,12 @@
 
                 <TextView
                     android:id="@+id/textView14Porcentaje"
-                    android:layout_width="90dp"
-                    android:layout_height="40dp"
+                    android:layout_width="110dp"
+                    android:layout_height="50dp"
                     android:background="@drawable/btn_bkg_5"
                     android:gravity="center"
                     android:textColor="@color/white"
-                    android:textSize="17sp"
+                    android:textSize="20sp"
                     android:textStyle="bold" />
 
                 <TextView
@@ -217,12 +217,12 @@
 
                 <TextView
                     android:id="@+id/textViewparticipa_programa_dosPorcentaje"
-                    android:layout_width="90dp"
-                    android:layout_height="40dp"
+                    android:layout_width="110dp"
+                    android:layout_height="50dp"
                     android:background="@drawable/btn_bkg_4"
                     android:gravity="center"
                     android:textColor="@color/white"
-                    android:textSize="17sp"
+                    android:textSize="20sp"
                     android:textStyle="bold" />
 
                 <TextView
@@ -248,12 +248,12 @@
 
                 <TextView
                     android:id="@+id/textViewparticipa_programa_tresPorcentaje"
-                    android:layout_width="90dp"
-                    android:layout_height="40dp"
+                    android:layout_width="110dp"
+                    android:layout_height="50dp"
                     android:background="@drawable/btn_bkg_8"
                     android:gravity="center"
                     android:textColor="@color/white"
-                    android:textSize="17sp"
+                    android:textSize="20sp"
                     android:textStyle="bold" />
 
                 <TextView
@@ -280,12 +280,12 @@
 
                 <TextView
                     android:id="@+id/textViewparticipa_programa_cuatroPorcentaje"
-                    android:layout_width="90dp"
-                    android:layout_height="40dp"
+                    android:layout_width="110dp"
+                    android:layout_height="50dp"
                     android:background="@drawable/btn_bkg_6"
                     android:gravity="center"
                     android:textColor="@color/white"
-                    android:textSize="17sp"
+                    android:textSize="20sp"
                     android:textStyle="bold" />
 
                 <TextView
@@ -311,12 +311,12 @@
 
                 <TextView
                     android:id="@+id/textViewQuincePorcentaje"
-                    android:layout_width="90dp"
-                    android:layout_height="40dp"
+                    android:layout_width="110dp"
+                    android:layout_height="50dp"
                     android:background="@drawable/btn_bkg_3"
                     android:gravity="center"
                     android:textColor="@color/white"
-                    android:textSize="17sp"
+                    android:textSize="20sp"
                     android:textStyle="bold" />
 
                 <TextView
@@ -343,12 +343,12 @@
 
                 <TextView
                     android:id="@+id/textViewparticipa_programa_noPorcentaje"
-                    android:layout_width="90dp"
-                    android:layout_height="40dp"
+                    android:layout_width="110dp"
+                    android:layout_height="50dp"
                     android:background="@drawable/btn_bkg_2"
                     android:gravity="center"
                     android:textColor="@color/white"
-                    android:textSize="17sp"
+                    android:textSize="20sp"
                     android:textStyle="bold" />
 
                 <TextView

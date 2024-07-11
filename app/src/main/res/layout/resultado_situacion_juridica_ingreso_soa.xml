@@ -155,12 +155,12 @@
 
                 <TextView
                     android:id="@+id/textViewingreso_sentenciadoPorcentaje"
-                    android:layout_width="90dp"
-                    android:layout_height="40dp"
+                    android:layout_width="110dp"
+                    android:layout_height="50dp"
                     android:background="@drawable/btn_bkg_2"
                     android:gravity="center"
                     android:textColor="@color/white"
-                    android:textSize="17sp"
+                    android:textSize="20sp"
                     android:textStyle="bold" />
 
                 <TextView
@@ -187,12 +187,12 @@
 
                 <TextView
                     android:id="@+id/textViewingreso_procesadoPorcentaje"
-                    android:layout_width="90dp"
-                    android:layout_height="40dp"
+                    android:layout_width="110dp"
+                    android:layout_height="50dp"
                     android:background="@drawable/btn_bkg_3"
                     android:gravity="center"
                     android:textColor="@color/white"
-                    android:textSize="17sp"
+                    android:textSize="20sp"
                     android:textStyle="bold" />
 
                 <TextView
