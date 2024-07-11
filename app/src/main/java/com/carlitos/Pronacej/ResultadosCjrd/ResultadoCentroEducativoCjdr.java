@@ -34,6 +34,7 @@ public class ResultadoCentroEducativoCjdr extends AppCompatActivity {
     private int instituto;
     private int universidad;
     private int ninguno;
+    private TextView textViewTotalCantidad;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -69,8 +70,13 @@ public class ResultadoCentroEducativoCjdr extends AppCompatActivity {
         universidad = getIntent().getIntExtra("universidad", 0);
         ninguno = getIntent().getIntExtra("ninguno", 0);
 
+        // Referencia al TextView del total de cantidad
+        textViewTotalCantidad = findViewById(R.id.textViewTotalCantidad);
+
         // Calcular el total de personas
         int totalPersonas = cebr + ceba + cepre + academia + cetpro + instituto + universidad + ninguno;
+
+        textViewTotalCantidad.setText(String.format("Total: %d", Math.round(totalPersonas)));
 
         // Calcular los porcentajes
         double porcentajeCebr = (double) cebr / totalPersonas * 100;
@@ -162,7 +168,7 @@ public class ResultadoCentroEducativoCjdr extends AppCompatActivity {
         xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
         xAxis.setDrawGridLines(false);
         xAxis.setValueFormatter(new IndexAxisValueFormatter(new String[]{
-                "CEBR", "SEBA", "CEPRE", "Academia",
+                "CEBR", "CEBA", "CEPRE", "Academia",
                 "CETPRO", "Instituto", "Universidad", "Ninguno"
         }));
         xAxis.setGranularity(1f);

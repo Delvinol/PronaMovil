@@ -1,4 +1,4 @@
-package com.carlitos.Pronacej.ResultadosCjrd;
+package com.carlitos.Pronacej.ResultadosSoa;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -21,16 +21,17 @@ import com.github.mikephil.charting.formatter.PercentFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ResultadosSituacionLaboralActualCjdr extends AppCompatActivity {
+public class ResultadosLaboralIngresoSoa extends AppCompatActivity {
 
-    private int trabaja_si;
-    private int trabaja_no;
+    private int trabaja_formal;
+    private int trabaja_informal;
+    private int trabaja_sin;
 
     private TextView textViewTotalCantidad;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.resultados_situacion_laboral_cjdr);
+        setContentView(R.layout.resultados_laboral_ingreso_soa);
 
         Button ButtonBack = findViewById(R.id.buttonBack);
         Button ButtonHome = findViewById(R.id.buttonHome);
@@ -41,7 +42,7 @@ public class ResultadosSituacionLaboralActualCjdr extends AppCompatActivity {
         ButtonHome.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intentHome = new Intent(ResultadosSituacionLaboralActualCjdr.this, CategoriaMenu.class);
+                Intent intentHome = new Intent(ResultadosLaboralIngresoSoa.this, CategoriaMenu.class);
                 startActivity(intentHome);
             }
         });
@@ -53,21 +54,26 @@ public class ResultadosSituacionLaboralActualCjdr extends AppCompatActivity {
         });
 
         Intent intent = getIntent();
-        int trabaja_no = intent.getIntExtra("trabaja_no", 0);
-        int trabaja_si = intent.getIntExtra("trabaja_si", 0);
+        int trabaja_formal = intent.getIntExtra("trabaja_formal", 0);
+        int trabaja_informal = intent.getIntExtra("trabaja_informal", 0);
+        int trabaja_sin = intent.getIntExtra("trabaja_sin", 0);
 
-        int totalSLA = trabaja_no + trabaja_si;
+        int totalSLA = trabaja_formal + trabaja_informal + trabaja_sin;
         textViewTotalCantidad.setText(String.format("Total: %d", Math.round(totalSLA)));
 
-// Calcular los porcentajes
-        double porcentajeTrabajaNo = (double) trabaja_no / totalSLA * 100;
-        double porcentajeTrabajaSi = (double) trabaja_si / totalSLA * 100;
+        // Calcular los porcentajes
+        double porcentajeTrabajaInformal = (double) trabaja_informal / totalSLA * 100;
+        double porcentajeTrabajaFormal = (double) trabaja_formal / totalSLA * 100;
+        double porcentajeTrabajaSin = (double) trabaja_sin / totalSLA * 100;
 
-        ((TextView) findViewById(R.id.textViewinser_labo_internaPorcentaje)).setText(String.format("%d", (int) Math.round(trabaja_no)));
-        ((TextView) findViewById(R.id.textViewinser_labo_interna)).setText("No Trabaja");
+        ((TextView) findViewById(R.id.textViewinser_labo_internaPorcentaje)).setText(String.format("%d", (int) Math.round(trabaja_informal)));
+        ((TextView) findViewById(R.id.textViewinser_labo_interna)).setText("Trabaja Informalmente");
 
-        ((TextView) findViewById(R.id.textViewinser_labo_externaPorcentaje)).setText(String.format("%d", (int) Math.round(trabaja_si)));
-        ((TextView) findViewById(R.id.textViewinser_labo_externa)).setText("Sí Trabaja");
+        ((TextView) findViewById(R.id.textViewinser_labo_externaPorcentaje)).setText(String.format("%d", (int) Math.round(trabaja_formal)));
+        ((TextView) findViewById(R.id.textViewinser_labo_externa)).setText("Trabaja Formalmente");
+
+        ((TextView) findViewById(R.id.textView_sin_Porcentaje)).setText(String.format("%d", (int) Math.round(trabaja_sin)));
+        ((TextView) findViewById(R.id.textViewinser_sin)).setText("Sin Trabajo");
 
 
         // Configurar el gráfico de pastel
@@ -76,12 +82,14 @@ public class ResultadosSituacionLaboralActualCjdr extends AppCompatActivity {
         pieChart.setUsePercentValues(true);
 
         List<PieEntry> entries = new ArrayList<>();
-        entries.add(new PieEntry((float) porcentajeTrabajaNo, "No Trabaja"));
-        entries.add(new PieEntry((float) porcentajeTrabajaSi, "Sí Trabaja"));
+        entries.add(new PieEntry((float) porcentajeTrabajaInformal, "Trabaja Informalmente"));
+        entries.add(new PieEntry((float) porcentajeTrabajaFormal, "Trabaja Formalmente"));
+        entries.add(new PieEntry((float) porcentajeTrabajaSin, "Sin Trabajo"));
 
         ArrayList<Integer> colors = new ArrayList<>();
         colors.add(getResources().getColor(R.color.Pronacej6));
         colors.add(getResources().getColor(R.color.Pronacej2));
+        colors.add(getResources().getColor(R.color.Pronacej5));
 
         PieDataSet dataSet = new PieDataSet(entries, "");
         dataSet.setColors(colors);

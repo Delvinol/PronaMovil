@@ -24,6 +24,14 @@
             android:name=".ResultadosSoa.ResultadoIntervencionTera"
             android:exported="false" />
         <activity
+            android:name=".ResultadosCjrd.ResultadosLaboralIngresoCjdr"
+            android:exported="false" />
+
+        <activity
+            android:name=".ResultadosSoa.ResultadosLaboralIngresoSoa"
+            android:exported="false" />
+
+        <activity
             android:name=".ResultadosSoa.ResultadoInterTera"
             android:exported="false" />
         <activity

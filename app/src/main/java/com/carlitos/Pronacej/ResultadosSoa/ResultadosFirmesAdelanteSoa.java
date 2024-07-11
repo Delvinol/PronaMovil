@@ -22,6 +22,7 @@ import java.util.ArrayList;
 public class ResultadosFirmesAdelanteSoa extends AppCompatActivity {
     private int firmes_aplica;
     private int firmes_no_aplica;
+    private TextView textViewTotalCantidad;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -48,9 +49,10 @@ public class ResultadosFirmesAdelanteSoa extends AppCompatActivity {
 
         firmes_aplica = getIntent().getIntExtra("firmes_aplica", 0);
         firmes_no_aplica = getIntent().getIntExtra("firmes_no_aplica", 0);
-
+        // Referencia al TextView del total de cantidad
+        textViewTotalCantidad = findViewById(R.id.textViewTotalCantidad);
         int totalFirmes = firmes_aplica + firmes_no_aplica;
-
+        textViewTotalCantidad.setText(String.format("Total: %d", Math.round(totalFirmes)));
         // Calcular los porcentajes
         double porcentajeAplica = (double) firmes_aplica / totalFirmes * 100;
         double porcentajeNoAplica = (double) firmes_no_aplica / totalFirmes * 100;

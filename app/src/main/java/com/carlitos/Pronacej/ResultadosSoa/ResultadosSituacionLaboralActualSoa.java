@@ -25,6 +25,7 @@ public class ResultadosSituacionLaboralActualSoa extends AppCompatActivity {
 
     private int trabaja_si;
     private int trabaja_no;
+    private TextView textViewTotalCantidad;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -52,9 +53,10 @@ public class ResultadosSituacionLaboralActualSoa extends AppCompatActivity {
         // Obtener los valores de las variables desde el intent
         trabaja_si = getIntent().getIntExtra("trabaja_si", 0);
         trabaja_no = getIntent().getIntExtra("trabaja_no", 0);
-
+        // Referencia al TextView del total de cantidad
+        textViewTotalCantidad = findViewById(R.id.textViewTotalCantidad);
         int totalSLA = trabaja_si + trabaja_no;
-
+        textViewTotalCantidad.setText(String.format("Total: %d", Math.round(totalSLA)));
         // Calcular los porcentajes
         double porcentajeTrabajaSi = (double) trabaja_si / totalSLA * 100;
         double porcentajeTrabajaNo = (double) trabaja_no / totalSLA * 100;

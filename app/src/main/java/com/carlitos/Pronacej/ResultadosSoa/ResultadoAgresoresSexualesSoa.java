@@ -24,6 +24,7 @@ public class ResultadoAgresoresSexualesSoa extends AppCompatActivity {
 
     private int agresor_si;
     private int agresor_no;
+    private TextView textViewTotalCantidad;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -56,10 +57,11 @@ public class ResultadoAgresoresSexualesSoa extends AppCompatActivity {
         // Obtener los valores de las variables desde el intent
         agresor_si = getIntent().getIntExtra("agresor_si", 18);
         agresor_no = getIntent().getIntExtra("agresor_no", 72);
-
+        // Referencia al TextView del total de cantidad
+        textViewTotalCantidad = findViewById(R.id.textViewTotalCantidad);
         // Calcular el total
         int total = agresor_si + agresor_no;
-
+        textViewTotalCantidad.setText(String.format("Total: %d", Math.round(total)));
         // Calcular los porcentajes
         double porcentajeAgresorSi = (total != 0) ? (agresor_si * 100.0 / total) : 0;
         double porcentajeAgresorNo = (total != 0) ? (agresor_no * 100.0 / total) : 0;

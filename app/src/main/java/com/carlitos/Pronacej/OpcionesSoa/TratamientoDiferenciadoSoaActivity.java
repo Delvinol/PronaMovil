@@ -1,6 +1,5 @@
 package com.carlitos.Pronacej.OpcionesSoa;
 
-import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
@@ -24,9 +23,11 @@ import com.carlitos.Pronacej.ResultadosSoa.ResultadoIntervencionTerapeuticaSoa;
 import com.carlitos.Pronacej.ResultadosSoa.ResultadoJusticiaTerapeuticaSoa;
 import com.carlitos.Pronacej.ResultadosSoa.ResultadosFirmesAdelanteSoa;
 import com.carlitos.Pronacej.ResultadosSoa.ResultadosProgramasSoa;
+import com.carlitos.Pronacej.Time.MonthYearPickerDialog;
 import com.carlitos.Pronacej.Utils.Apis;
 import com.carlitos.Pronacej.Utils.SoaService;
 
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
@@ -38,6 +39,7 @@ import retrofit2.Response;
 
 public class TratamientoDiferenciadoSoaActivity extends AppCompatActivity {
 
+    private static final String TAG = "TD_Soa";
     private int participa_programa_uno;
     private int participa_programa_dos;
     private int participa_programa_tres;
@@ -56,46 +58,28 @@ public class TratamientoDiferenciadoSoaActivity extends AppCompatActivity {
     private int comunidad_no;
     private int firmes_aplica;
     private int firmes_no_aplica;
+    private int intervencion_aplica;
+    private int intervencion_no_aplica;
 
     private TextView tvErrorFecha;
     private Button btnGenerarGrafico;
+    private Button btnMonthYearPicker;
     private SoaService soaService;
-    private DatePickerDialog datePickerDialog;
-    private Button dateButton;
-    private String selectedDate;
     private CheckBox cbIncluirEstadoIng;
     private CheckBox cbIncluirEstadoAten;
-    private int intervencion_aplica;
-    private int intervencion_no_aplica;
+    private int selectedYear, selectedMonth;
+    private Calendar calendar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tratamiento_diferenciado_soa);
 
-        Button ButtonBack = findViewById(R.id.buttonBack);
-        Button ButtonHome = findViewById(R.id.buttonHome);
-
-        ButtonHome.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intentHome = new Intent(TratamientoDiferenciadoSoaActivity.this, CategoriaMenu.class);
-                startActivity(intentHome);
-            }
-
-        });
-        ButtonBack.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onBackPressed(); // Llamar al método onBackPressed para ir atrás
-            }
-        });
-
-
-        initDatePicker();
-        dateButton = findViewById(R.id.etFechaInicio);
-        selectedDate = getTodaysDate();
-        dateButton.setText(selectedDate);
+        btnMonthYearPicker = findViewById(R.id.btnMonthYearPicker);
+        calendar = Calendar.getInstance();
+        selectedYear = calendar.get(Calendar.YEAR);
+        selectedMonth = calendar.get(Calendar.MONTH);
+        updateDateButtonText();
 
         cbIncluirEstadoIng = findViewById(R.id.cbIncluirEstadoIng);
         cbIncluirEstadoAten = findViewById(R.id.cbIncluirEstadoAten);
@@ -105,19 +89,21 @@ public class TratamientoDiferenciadoSoaActivity extends AppCompatActivity {
         soaService = Apis.getSoaService();
 
         btnGenerarGrafico.setOnClickListener(view -> {
-            String fechaInicio = showSelectedDate().toString().trim();
-            boolean incluirEstadoIng = cbIncluirEstadoIng.isChecked();
-
-            if (validarFechaFormato(fechaInicio)) {
-                tvErrorFecha.setVisibility(View.GONE);
-                llamarEndPoint(fechaInicio, incluirEstadoIng);
-                Toast.makeText(TratamientoDiferenciadoSoaActivity.this, "Fecha Actualizada", Toast.LENGTH_SHORT).show();
-
-            } else {
-                tvErrorFecha.setVisibility(View.VISIBLE);
-            }
+            llamarEndPoint();
+            Toast.makeText(TratamientoDiferenciadoSoaActivity.this, "Fecha Actualizada", Toast.LENGTH_SHORT).show();
         });
+
         setupCheckBoxListeners();
+
+        Button ButtonBack = findViewById(R.id.buttonBack);
+        Button ButtonHome = findViewById(R.id.buttonHome);
+
+        ButtonHome.setOnClickListener(v -> {
+            Intent intentHome = new Intent(TratamientoDiferenciadoSoaActivity.this, CategoriaMenu.class);
+            startActivity(intentHome);
+        });
+
+        ButtonBack.setOnClickListener(v -> onBackPressed());
 
         // Obtener extras del intent si existen
         Intent intent = getIntent();
@@ -150,7 +136,6 @@ public class TratamientoDiferenciadoSoaActivity extends AppCompatActivity {
         ConstraintLayout opcion6 = findViewById(R.id.Opcion6);
         ConstraintLayout opcion7 = findViewById(R.id.Opcion7);
         ConstraintLayout opcion10 = findViewById(R.id.Opcion10);
-
 
         opcion1.setOnClickListener(v -> {
             Intent intentOpcion1 = new Intent(TratamientoDiferenciadoSoaActivity.this, ResultadosProgramasSoa.class);
@@ -203,8 +188,8 @@ public class TratamientoDiferenciadoSoaActivity extends AppCompatActivity {
             intentOpcion10.putExtra("intervencion_aplica", intervencion_aplica);
             intentOpcion10.putExtra("intervencion_no_aplica", intervencion_no_aplica);
             startActivity(intentOpcion10);
-            Log.d(String.valueOf(intervencion_aplica),"DATO APLICA");
-            Log.d(String.valueOf(intervencion_no_aplica),"DATO NO APLICA");
+            Log.d(String.valueOf(intervencion_aplica), "DATO APLICA");
+            Log.d(String.valueOf(intervencion_no_aplica), "DATO NO APLICA");
         });
     }
 
@@ -222,17 +207,20 @@ public class TratamientoDiferenciadoSoaActivity extends AppCompatActivity {
         });
     }
 
-    private boolean validarFechaFormato(String fecha) {
-        String pattern = "^\\d{4}-\\d{2}-\\d{2}$";
-        return fecha.matches(pattern);
-    }
+    private void llamarEndPoint() {
+        calendar.set(selectedYear, selectedMonth, 1);
+        String fechaInicio = new SimpleDateFormat("yyyy-MM-dd", Locale.US).format(calendar.getTime());
 
-    private void llamarEndPoint(String fechaInicio, boolean incluirEstadoIng) {
-        Call<List<Map<String, Object>>> call = soaService.obtenerTD(fechaInicio, fechaInicio, incluirEstadoIng);
+        calendar.set(selectedYear, selectedMonth, calendar.getActualMaximum(Calendar.DAY_OF_MONTH));
+        String fechaFin = new SimpleDateFormat("yyyy-MM-dd", Locale.US).format(calendar.getTime());
+
+        boolean incluirEstadoIng = cbIncluirEstadoIng.isChecked();
+
+        Call<List<Map<String, Object>>> call = soaService.obtenerTD(fechaInicio, fechaFin, incluirEstadoIng);
         call.enqueue(new Callback<List<Map<String, Object>>>() {
             @Override
             public void onResponse(Call<List<Map<String, Object>>> call, Response<List<Map<String, Object>>> response) {
-                if (response.isSuccessful()) {
+                if (response.isSuccessful() && response.body() != null && !response.body().isEmpty()) {
                     List<Map<String, Object>> data = response.body();
                     if (data != null && !data.isEmpty()) {
                         Map<String, Object> firstElement = data.get(0);
@@ -253,21 +241,20 @@ public class TratamientoDiferenciadoSoaActivity extends AppCompatActivity {
                         comunidad_no = getIntValue(firstElement, "comunidad_no");
                         comunidad_si = getIntValue(firstElement, "comunidad_si");
                         firmes_aplica = getIntValue(firstElement, "firmes_aplica");
-                        firmes_no_aplica = getIntValue(firstElement, "firmes_no_aplica");                        firmes_no_aplica = getIntValue(firstElement, "firmes_no_aplica");
+                        firmes_no_aplica = getIntValue(firstElement, "firmes_no_aplica");
                         intervencion_aplica = getIntValue(firstElement, "intervencion_aplica");
                         intervencion_no_aplica = getIntValue(firstElement, "intervencion_no_aplica");
-
-
-                        // Aquí puedes actualizar la UI con los datos obtenidos
                     }
                 } else {
-                    // Maneja el caso de error
+                    Log.e(TAG, "Error en la respuesta: " + response.message());
+                    Toast.makeText(TratamientoDiferenciadoSoaActivity.this, "Error al obtener datos", Toast.LENGTH_SHORT).show();
                 }
             }
 
             @Override
             public void onFailure(Call<List<Map<String, Object>>> call, Throwable t) {
-                // Maneja el caso de fallo de la llamada
+                Log.e(TAG, "Fallo en la llamada: " + t.getMessage());
+                Toast.makeText(TratamientoDiferenciadoSoaActivity.this, "Error de conexión", Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -283,117 +270,25 @@ public class TratamientoDiferenciadoSoaActivity extends AppCompatActivity {
         }
     }
 
-    private void initDatePicker() {
-        Locale locale = new Locale("es", "ES");
-        Locale.setDefault(locale);
-
-        DatePickerDialog.OnDateSetListener dateSetListener = new DatePickerDialog.OnDateSetListener() {
+    public void openMonthYearPicker(View view) {
+        MonthYearPickerDialog pd = new MonthYearPickerDialog();
+        pd.setListener(new DatePickerDialog.OnDateSetListener() {
             @Override
-            public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-                month = month + 1;
-                selectedDate = makeDateString(dayOfMonth, month, year);
-                dateButton.setText(selectedDate);
+            public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+                selectedYear = year;
+                selectedMonth = monthOfYear;
+                updateDateButtonText();
             }
-        };
-
-        Calendar cal = Calendar.getInstance();
-        int year = cal.get(Calendar.YEAR);
-        int month = cal.get(Calendar.MONTH);
-        int dayOfMonth = cal.get(Calendar.DAY_OF_MONTH);
-
-        int style = AlertDialog.THEME_HOLO_LIGHT;
-
-        datePickerDialog = new DatePickerDialog(this, style, dateSetListener, year, month, dayOfMonth);
-        datePickerDialog.getDatePicker().setMaxDate(System.currentTimeMillis());
+        });
+        pd.show(getSupportFragmentManager(), "MonthYearPickerDialog");
     }
 
-    private String makeDateString(int dayOfMonth, int month, int year) {
-        return getMonthFormat(month) + " " + dayOfMonth + " " + year;
-    }
 
-    private String getMonthFormat(int month) {
-        switch (month) {
-            case 1:
-                return "ENE";
-            case 2:
-                return "FEB";
-            case 3:
-                return "MAR";
-            case 4:
-                return "ABR";
-            case 5:
-                return "MAY";
-            case 6:
-                return "JUN";
-            case 7:
-                return "JUL";
-            case 8:
-                return "AGO";
-            case 9:
-                return "SEP";
-            case 10:
-                return "OCT";
-            case 11:
-                return "NOV";
-            case 12:
-                return "DIC";
-            default:
-                return "ENE";
-        }
-    }
-
-    private String formatDateToYMD(int year, int month, int dayOfMonth) {
-        return String.format("%04d-%02d-%02d", year, month, dayOfMonth);
-    }
-
-    public void openDatePickerInicio(View view) {
-        datePickerDialog.show();
-    }
-
-    public String showSelectedDate() {
-        String[] dateParts = selectedDate.split(" ");
-        int day = Integer.parseInt(dateParts[1]);
-        int month = getMonthNumber(dateParts[0]);
-        int year = Integer.parseInt(dateParts[2]);
-        return formatDateToYMD(year, month, day);
-    }
-
-    private int getMonthNumber(String month) {
-        switch (month) {
-            case "ENE":
-                return 1;
-            case "FEB":
-                return 2;
-            case "MAR":
-                return 3;
-            case "ABR":
-                return 4;
-            case "MAY":
-                return 5;
-            case "JUN":
-                return 6;
-            case "JUL":
-                return 7;
-            case "AGO":
-                return 8;
-            case "SEP":
-                return 9;
-            case "OCT":
-                return 10;
-            case "NOV":
-                return 11;
-            case "DIC":
-                return 12;
-            default:
-                return 1;
-        }
-    }
-
-    private String getTodaysDate() {
-        Calendar cal = Calendar.getInstance();
-        int year = cal.get(Calendar.YEAR);
-        int month = cal.get(Calendar.MONTH) + 1;
-        int dayOfMonth = cal.get(Calendar.DAY_OF_MONTH);
-        return makeDateString(dayOfMonth, month, year);
+        private void updateDateButtonText() {
+        calendar.set(Calendar.YEAR, selectedYear);
+        calendar.set(Calendar.MONTH, selectedMonth);
+        String monthYearStr = new SimpleDateFormat("MMM yyyy", new Locale("es", "ES"))
+                .format(calendar.getTime());
+        btnMonthYearPicker.setText(monthYearStr.toUpperCase());
     }
 }

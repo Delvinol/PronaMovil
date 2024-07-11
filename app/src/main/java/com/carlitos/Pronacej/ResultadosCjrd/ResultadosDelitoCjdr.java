@@ -37,6 +37,8 @@ public class ResultadosDelitoCjdr extends AppCompatActivity {
     private int sicariato;
     private int otros;
 
+    private TextView textViewTotalCantidad;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -73,10 +75,14 @@ public class ResultadosDelitoCjdr extends AppCompatActivity {
         sicariato = intent.getIntExtra("sicariato", 0);
         otros = intent.getIntExtra("otros", 0);
 
+        // Referencia al TextView del total de cantidad
+        textViewTotalCantidad = findViewById(R.id.textViewTotalCantidad);
+
         // Calcular el total de delitos
         int totalDelitos = autoaborto + exposicion_peligro + feminicidio + homicidio_c + homicidio_s +
                 lesiones_g + lesiones_l + parricidio + sicariato + otros;
 
+        textViewTotalCantidad.setText(String.format("Total: %d", Math.round(totalDelitos)));
         // Calcular los porcentajes
         double porcentajeAutoaborto = (double) autoaborto / totalDelitos * 100;
         double porcentajeExposicionPeligro = (double) exposicion_peligro / totalDelitos * 100;

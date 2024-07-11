@@ -1,6 +1,5 @@
 package com.carlitos.Pronacej.FiltrosCjdr;
 
-import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
@@ -8,7 +7,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.DatePicker;
-import android.widget.EditText;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
@@ -16,10 +14,12 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.carlitos.Pronacej.ActivitysPadres.CategoriaMenu;
 import com.carlitos.Pronacej.R;
-import com.carlitos.Pronacej.ResultadosCjrd.ResultadosSituacionLaboralActualCjdr;
+import com.carlitos.Pronacej.ResultadosCjrd.ResultadosLaboralIngresoCjdr;
+import com.carlitos.Pronacej.Time.MonthYearPickerDialog;
 import com.carlitos.Pronacej.Utils.Apis;
 import com.carlitos.Pronacej.Utils.CjdrService;
 
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
@@ -37,16 +37,18 @@ public class FiltroLaboralCjdr extends AppCompatActivity {
     private int seguro_ninguno;
     private int trabaja_si;
     private int trabaja_no;
-    private EditText etFechaInicio;
+    private int trabaja_formal;
+    private int trabaja_informal;
+    private int trabaja_sin;
     private TextView tvErrorFecha;
     private Button btnGenerarGrafico;
-
-    private DatePickerDialog datePickerDialog;
-    private Button dateButton;
-    private String selectedDate;
+    private Button btnMonthYearPicker;
     private CjdrService cjdrService;
     private CheckBox cbIncluirEstadoIng;
     private CheckBox cbIncluirEstadoAten;
+    private int selectedYear, selectedMonth;
+    private Calendar calendar;
+
 
 
     @Override
@@ -54,54 +56,36 @@ public class FiltroLaboralCjdr extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.filtro_laboral_cjdr);
 
-
-        initDatePicker();
-        dateButton = findViewById(R.id.etFechaInicio);
-        selectedDate = getTodaysDate();
-        dateButton.setText(selectedDate);
+        btnMonthYearPicker = findViewById(R.id.btnMonthYearPicker);
+        calendar = Calendar.getInstance();
+        selectedYear = calendar.get(Calendar.YEAR);
+        selectedMonth = calendar.get(Calendar.MONTH);
+        updateDateButtonText();
 
         cbIncluirEstadoIng = findViewById(R.id.cbIncluirEstadoIng);
         cbIncluirEstadoAten = findViewById(R.id.cbIncluirEstadoAten);
-
 
         tvErrorFecha = findViewById(R.id.tvErrorFecha);
         btnGenerarGrafico = findViewById(R.id.btnEnviar);
         cjdrService = Apis.getCjdrService();
 
         btnGenerarGrafico.setOnClickListener(view -> {
-            showSelectedDate(etFechaInicio);
-
-            String fechaInicio = showSelectedDate(etFechaInicio).toString().trim();
-            boolean incluirEstadoIng = cbIncluirEstadoIng.isChecked();
-
-            if (validarFechaFormato(fechaInicio)) {
-                tvErrorFecha.setVisibility(View.GONE);
-                llamarEndPoint(fechaInicio, incluirEstadoIng);
-            } else {
-                tvErrorFecha.setVisibility(View.VISIBLE);
-            }
+            llamarEndPoint();
         });
+
         setupCheckBoxListeners();
 
         Button ButtonBack = findViewById(R.id.buttonBack);
         Button ButtonHome = findViewById(R.id.buttonHome);
 
-        ButtonHome.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intentHome = new Intent(FiltroLaboralCjdr.this, CategoriaMenu.class);
-                startActivity(intentHome);
-            }
-
-        });
-        ButtonBack.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onBackPressed(); // Llamar al método onBackPressed para ir atrás
-            }
+        ButtonHome.setOnClickListener(v -> {
+            Intent intentHome = new Intent(FiltroLaboralCjdr.this, CategoriaMenu.class);
+            startActivity(intentHome);
         });
 
+        ButtonBack.setOnClickListener(v -> onBackPressed());
     }
+
     private void setupCheckBoxListeners() {
         cbIncluirEstadoIng.setOnCheckedChangeListener((buttonView, isChecked) -> {
             if (isChecked) {
@@ -116,21 +100,22 @@ public class FiltroLaboralCjdr extends AppCompatActivity {
         });
     }
 
-    private boolean validarFechaFormato(String fecha) {
-        String pattern = "^\\d{4}-\\d{2}-\\d{2}$";
-        return fecha.matches(pattern);
-    }
+    private void llamarEndPoint() {
+        calendar.set(selectedYear, selectedMonth, 1);
+        String fechaInicio = new SimpleDateFormat("yyyy-MM-dd", Locale.US).format(calendar.getTime());
 
-    private void llamarEndPoint(String fechaInicio, boolean incluirEstadoIng) {
-        Call<List<Map<String, Object>>> call = cjdrService.obtenerIL(fechaInicio, fechaInicio, incluirEstadoIng);
+        calendar.set(selectedYear, selectedMonth, calendar.getActualMaximum(Calendar.DAY_OF_MONTH));
+        String fechaFin = new SimpleDateFormat("yyyy-MM-dd", Locale.US).format(calendar.getTime());
+
+        boolean incluirEstadoIng = cbIncluirEstadoIng.isChecked();
+
+        Call<List<Map<String, Object>>> call = cjdrService.obtenerIL(fechaInicio, fechaFin, incluirEstadoIng);
         call.enqueue(new Callback<List<Map<String, Object>>>() {
             @Override
             public void onResponse(Call<List<Map<String, Object>>> call, Response<List<Map<String, Object>>> response) {
                 if (response.isSuccessful()) {
-
                     List<Map<String, Object>> data = response.body();
                     if (data != null && !data.isEmpty()) {
-
                         Map<String, Object> firstElement = data.get(0);
                         seguro_sis = getIntValue(firstElement, "seguro_sis");
                         seguro_essalud = getIntValue(firstElement, "seguro_essalud");
@@ -138,16 +123,21 @@ public class FiltroLaboralCjdr extends AppCompatActivity {
                         seguro_ninguno = getIntValue(firstElement, "seguro_ninguno");
                         trabaja_si = getIntValue(firstElement, "trabaja_si");
                         trabaja_no = getIntValue(firstElement, "trabaja_no");
-
+                        trabaja_formal = getIntValue(firstElement, "trabaja_formal");
+                        trabaja_informal = getIntValue(firstElement, "trabaja_informal");
+                        trabaja_sin = getIntValue(firstElement, "trabaja_sin");
 
                         // Crear el Intent y añadir los extras
-                        Intent intent = new Intent(FiltroLaboralCjdr.this, ResultadosSituacionLaboralActualCjdr.class);
+                        Intent intent = new Intent(FiltroLaboralCjdr.this, ResultadosLaboralIngresoCjdr.class);
                         intent.putExtra("seguro_sis", seguro_sis);
                         intent.putExtra("seguro_essalud", seguro_essalud);
                         intent.putExtra("seguro_particular", seguro_particular);
                         intent.putExtra("seguro_ninguno", seguro_ninguno);
                         intent.putExtra("trabaja_no", trabaja_no);
                         intent.putExtra("trabaja_si", trabaja_si);
+                        intent.putExtra("trabaja_formal", trabaja_formal);
+                        intent.putExtra("trabaja_informal", trabaja_informal);
+                        intent.putExtra("trabaja_sin", trabaja_sin);
                         // Iniciar la actividad PoblacionCjdrActivity
                         startActivity(intent);
                     }
@@ -163,7 +153,6 @@ public class FiltroLaboralCjdr extends AppCompatActivity {
         });
     }
 
-
     private int getIntValue(Map<String, Object> map, String key) {
         Object value = map.get(key);
         if (value instanceof Double) {
@@ -175,102 +164,24 @@ public class FiltroLaboralCjdr extends AppCompatActivity {
         }
     }
 
-
-    private void initDatePicker() {
-        // Establece el Locale a español
-        Locale locale = new Locale("es", "ES");
-        Locale.setDefault(locale);
-
-        DatePickerDialog.OnDateSetListener dateSetListener = new DatePickerDialog.OnDateSetListener() {
+    public void openMonthYearPicker(View view) {
+        MonthYearPickerDialog pd = new MonthYearPickerDialog();
+        pd.setListener(new DatePickerDialog.OnDateSetListener() {
             @Override
-            public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-                month = month + 1;
-                selectedDate = makeDateString(dayOfMonth, month, year);
-                dateButton.setText(selectedDate);
+            public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+                selectedYear = year;
+                selectedMonth = monthOfYear;
+                updateDateButtonText();
             }
-        };
-
-        Calendar cal = Calendar.getInstance();
-        int year = cal.get(Calendar.YEAR);
-        int month = cal.get(Calendar.MONTH);
-        int dayOfMonth = cal.get(Calendar.DAY_OF_MONTH);
-
-        int style = AlertDialog.THEME_HOLO_LIGHT;
-
-        datePickerDialog = new DatePickerDialog(this, style, dateSetListener, year, month, dayOfMonth);
-        datePickerDialog.getDatePicker().setMaxDate(System.currentTimeMillis());
-    }
-    private String makeDateString(int dayOfMonth, int month, int year) {
-        return getMonthFormat(month) + " " + dayOfMonth + " " + year;
-    }
-    private String getMonthFormat(int month) {
-        if (month == 1) return "ENE";
-        if (month == 2) return "FEB";
-        if (month == 3) return "MAR";
-        if (month == 4) return "ABR";
-        if (month == 5) return "MAY";
-        if (month == 6) return "JUN";
-        if (month == 7) return "JUL";
-        if (month == 8) return "AGO";
-        if (month == 9) return "SEP";
-        if (month == 10) return "OCT";
-        if (month == 11) return "NOV";
-        if (month == 12) return "DIC";
-        return "ENE";
-    }
-    private String formatDateToYMD(int year, int month, int dayOfMonth) {
-        return String.format("%04d-%02d-%02d", year, month, dayOfMonth);
+        });
+        pd.show(getSupportFragmentManager(), "MonthYearPickerDialog");
     }
 
-    public void openDatePicker(View view) {
-        datePickerDialog.show();
+    private void updateDateButtonText() {
+        calendar.set(Calendar.YEAR, selectedYear);
+        calendar.set(Calendar.MONTH, selectedMonth);
+        String monthYearStr = new SimpleDateFormat("MMM yyyy", new Locale("es", "ES"))
+                .format(calendar.getTime());
+        btnMonthYearPicker.setText(monthYearStr.toUpperCase());
     }
-    public void openDatePickerInicio(View view) {
-        datePickerDialog.show();
-    }
-
-
-    public String showSelectedDate(View view) {
-        String[] dateParts = selectedDate.split(" ");
-        int day = Integer.parseInt(dateParts[1]);
-        int month = getMonthNumber(dateParts[0]);
-        int year = Integer.parseInt(dateParts[2]);
-        String formattedDate = formatDateToYMD(year, month, day);
-
-        String formato;
-        formato = formattedDate;
-        return formattedDate;
-
-    }
-
-
-    private int getMonthNumber(String month) {
-        switch (month) {
-            case "ENE": return 1;
-            case "FEB": return 2;
-            case "MAR": return 3;
-            case "ABR": return 4;
-            case "MAY": return 5;
-            case "JUN": return 6;
-            case "JUL": return 7;
-            case "AGO": return 8;
-            case "SEP": return 9;
-            case "OCT": return 10;
-            case "NOV": return 11;
-            case "DIC": return 12;
-            default: return 1;
-        }
-    }
-    private String getTodaysDate() {
-        Calendar cal = Calendar.getInstance();
-        int year = cal.get(Calendar.YEAR);
-        int month = cal.get(Calendar.MONTH);
-        month = month + 1;
-        int dayOfMonth = cal.get(Calendar.DAY_OF_MONTH);
-        return makeDateString(dayOfMonth, month, year);
-    }
-
-
-
-
 }

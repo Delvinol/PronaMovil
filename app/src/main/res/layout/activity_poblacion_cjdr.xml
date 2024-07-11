@@ -199,7 +199,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="8dp"
                         android:fontFamily="@font/montserrat_bold"
-                        android:text="   Población\n Centros Cjdr"
+                        android:text="Población\n      Cjdr"
                         android:textColor="@color/white"
                         android:textSize="18sp"
                         android:textStyle="bold"

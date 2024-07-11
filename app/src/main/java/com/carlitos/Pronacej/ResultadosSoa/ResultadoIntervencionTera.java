@@ -23,6 +23,7 @@ import java.util.List;
 public class ResultadoIntervencionTera extends AppCompatActivity {
     private int intervencion_aplica;
     private int intervencion_no_aplica;
+    private TextView textViewTotalCantidad;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -49,10 +50,12 @@ public class ResultadoIntervencionTera extends AppCompatActivity {
 
         intervencion_aplica = getIntent().getIntExtra("intervencion_aplica", 0);
         intervencion_no_aplica = getIntent().getIntExtra("intervencion_no_aplica", 0);
-
+        // Referencia al TextView del total de cantidad
+        textViewTotalCantidad = findViewById(R.id.textViewTotalCantidad);
         // Calcular el total
         int totalIntervenciones = intervencion_aplica + intervencion_no_aplica;
 
+        textViewTotalCantidad.setText(String.format("Total: %d", Math.round(totalIntervenciones)));
         // Calcular los porcentajes
         double porcentajeAplica = (double) intervencion_aplica / totalIntervenciones * 100;
         double porcentajeNoAplica = (double) intervencion_no_aplica / totalIntervenciones * 100;

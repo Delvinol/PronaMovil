@@ -33,6 +33,8 @@ public class ResultadosProgramasCjdr extends AppCompatActivity {
     private int participa_programa_cinco;
     private int participa_programa_no;
 
+    private TextView textViewTotalCantidad;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -48,6 +50,9 @@ public class ResultadosProgramasCjdr extends AppCompatActivity {
         participa_programa_cuatro = intent.getIntExtra("participa_programa_cuatro", 0);
         participa_programa_cinco = intent.getIntExtra("participa_programa_cinco", 0);
         participa_programa_no = intent.getIntExtra("participa_programa_no", 0);
+
+        // Referencia al TextView del total de cantidad
+        textViewTotalCantidad = findViewById(R.id.textViewTotalCantidad);
 
         Button ButtonBack = findViewById(R.id.buttonBack);
         Button ButtonHome = findViewById(R.id.buttonHome);
@@ -70,6 +75,8 @@ public class ResultadosProgramasCjdr extends AppCompatActivity {
         // Calcular el total de participantes
         int totalParticipantes = participa_programa_uno + participa_programa_dos + participa_programa_tres +
                 participa_programa_cuatro + participa_programa_cinco + participa_programa_no;
+
+        textViewTotalCantidad.setText(String.format("Total: %d", Math.round(totalParticipantes)));
 
         // Calcular los porcentajes
         double porcentajeUno = (double) participa_programa_uno / totalParticipantes * 100;

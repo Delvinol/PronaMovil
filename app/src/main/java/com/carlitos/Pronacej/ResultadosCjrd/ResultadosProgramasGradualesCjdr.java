@@ -30,6 +30,7 @@ public class ResultadosProgramasGradualesCjdr extends AppCompatActivity {
     private int programa_tres;
     private int programa_cuatro;
     private int programa_no_aplica;
+    private TextView textViewTotalCantidad;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,6 +44,9 @@ public class ResultadosProgramasGradualesCjdr extends AppCompatActivity {
         programa_tres = intent.getIntExtra("programa_tres", 0);
         programa_cuatro = intent.getIntExtra("programa_cuatro", 0);
         programa_no_aplica = intent.getIntExtra("programa_no_aplica", 0);
+
+        // Referencia al TextView del total de cantidad
+        textViewTotalCantidad = findViewById(R.id.textViewTotalCantidad);
 
         setupNavigation();
         setupChart();
@@ -70,6 +74,7 @@ public class ResultadosProgramasGradualesCjdr extends AppCompatActivity {
         barChart.setMinimumHeight(800);
 
         int totalParticipantes = programa_uno + programa_dos + programa_tres + programa_cuatro + programa_no_aplica;
+        textViewTotalCantidad.setText(String.format("Total: %d", Math.round(totalParticipantes)));
 
         List<BarEntry> entries = new ArrayList<>();
         entries.add(new BarEntry(0f, (float) programa_uno / totalParticipantes * 100));

@@ -24,6 +24,8 @@ public class ResultadoIntervencionTerapeuticaCjdr extends AppCompatActivity {
     private int comunidad_si;
     private int comunidad_no;
 
+    private TextView textViewTotalCantidad;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -50,8 +52,12 @@ public class ResultadoIntervencionTerapeuticaCjdr extends AppCompatActivity {
         comunidad_si = getIntent().getIntExtra("comunidad_si", 0);
         comunidad_no = getIntent().getIntExtra("comunidad_no", 0);
 
+        // Referencia al TextView del total de cantidad
+        textViewTotalCantidad = findViewById(R.id.textViewTotalCantidad);
+
         // Calcular el total
         int totalIntervenciones = comunidad_si + comunidad_no;
+        textViewTotalCantidad.setText(String.format("Total: %d", Math.round(totalIntervenciones)));
 
         // Calcular los porcentajes
         double porcentajeAplica = (double) comunidad_si / totalIntervenciones * 100;

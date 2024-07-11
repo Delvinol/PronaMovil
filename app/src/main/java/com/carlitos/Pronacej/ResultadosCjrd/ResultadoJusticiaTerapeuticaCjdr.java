@@ -25,6 +25,8 @@ public class ResultadoJusticiaTerapeuticaCjdr extends AppCompatActivity {
     private int justicia_si;
     private int justicia_no;
 
+    private TextView textViewTotalCantidad;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -50,9 +52,13 @@ public class ResultadoJusticiaTerapeuticaCjdr extends AppCompatActivity {
 
         justicia_si = getIntent().getIntExtra("justicia_si", 0);
         justicia_no = getIntent().getIntExtra("justicia_no", 0);
+        // Referencia al TextView del total de cantidad
+        textViewTotalCantidad = findViewById(R.id.textViewTotalCantidad);
 
         // Calcular los porcentajes
         int total = justicia_si + justicia_no;
+
+        textViewTotalCantidad.setText(String.format("Total: %d", Math.round(total)));
         double porcentaje_si = (double) justicia_si / total * 100;
         double porcentaje_no = (double) justicia_no / total * 100;
 

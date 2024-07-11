@@ -29,6 +29,8 @@ public class ResultadosEstadoCjrd extends AppCompatActivity {
     private ArrayList<HashMap<String, String>> reportData;
     private TextView[] textViewsPorcentaje = new TextView[10];
     private TextView[] textViewsNombre = new TextView[10];
+    private TextView textViewTotalCantidad1;
+    private TextView textViewTotalCantidad2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,31 +51,31 @@ public class ResultadosEstadoCjrd extends AppCompatActivity {
         ButtonBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                onBackPressed(); // Llamar al método onBackPressed para ir atrás
+                onBackPressed();
             }
         });
 
         barChart = findViewById(R.id.barChart);
 
-        // Obtener los datos pasados desde la actividad anterior
         Intent intent = getIntent();
         reportData = (ArrayList<HashMap<String, String>>) intent.getSerializableExtra("reportData");
 
-        // Verificar si reportData es null
         if (reportData == null || reportData.isEmpty()) {
-            // Manejo de error si no hay datos
             Log.e("ResultadosEstadoCjrd", "No hay datos en reportData");
             return;
         }
 
-        // Log de datos de entrada
-        for (int i = 0; i < reportData.size(); i++) {
-            Log.d("ResultadosEstadoCjrd", "Datos de entrada - Centro: " + reportData.get(i).get("centro_cjdr") +
-                    ", Egresos: " + reportData.get(i).get("egresos_cjdr") +
-                    ", Ingresos: " + reportData.get(i).get("ingresos_cjdr"));
-        }
+        initializeViews();
+        setupChart();
+    }
 
-        // Referencias a los TextView de porcentaje
+    private void initializeViews() {
+        textViewTotalCantidad1 = findViewById(R.id.textViewTotalCantidad1);
+        textViewTotalCantidad2 = findViewById(R.id.textViewTotalCantidad2);
+
+        Log.d("ResultadosEstadoCjrd", "textViewTotalCantidad1: " + (textViewTotalCantidad1 == null ? "null" : "not null"));
+        Log.d("ResultadosEstadoCjrd", "textViewTotalCantidad2: " + (textViewTotalCantidad2 == null ? "null" : "not null"));
+
         textViewsPorcentaje[9] = findViewById(R.id.textViewAlfonsoUgartePorcentaje);
         textViewsPorcentaje[8] = findViewById(R.id.textViewMarcavallePorcentaje);
         textViewsPorcentaje[7] = findViewById(R.id.textViewPucallpaPorcentaje);
@@ -85,7 +87,6 @@ public class ResultadosEstadoCjrd extends AppCompatActivity {
         textViewsPorcentaje[1] = findViewById(R.id.textViewAnexoIIIPorcentaje);
         textViewsPorcentaje[0] = findViewById(R.id.textViewLimaPorcentaje);
 
-        // Referencias a los TextView de nombres
         textViewsNombre[9] = findViewById(R.id.textViewAlfonso_Ugarte);
         textViewsNombre[8] = findViewById(R.id.textViewMarcavalle);
         textViewsNombre[7] = findViewById(R.id.textViewPucallpa);
@@ -97,10 +98,6 @@ public class ResultadosEstadoCjrd extends AppCompatActivity {
         textViewsNombre[1] = findViewById(R.id.textViewAnexoIII);
         textViewsNombre[0] = findViewById(R.id.textViewLima);
 
-        // Crear los objetos BarEntry a partir de los datos
-        ArrayList<BarEntry> entries = new ArrayList<>();
-
-        // Calcular la población total
         float totalEgresos = 0;
         float totalIngresos = 0;
         for (HashMap<String, String> data : reportData) {
@@ -108,56 +105,56 @@ public class ResultadosEstadoCjrd extends AppCompatActivity {
             totalIngresos += safeParseFloat(data.get("ingresos_cjdr"));
         }
 
-        // Asignar los datos a los TextView y crear las entradas del gráfico
+        if (textViewTotalCantidad1 != null) {
+            textViewTotalCantidad1.setText(String.format("%.0f", totalIngresos));
+        }
+        if (textViewTotalCantidad2 != null) {
+            textViewTotalCantidad2.setText(String.format("%.0f", totalEgresos));
+        }
+    }
+
+    private void setupChart() {
+        ArrayList<BarEntry> entries = new ArrayList<>();
+
         for (int i = 0; i < reportData.size(); i++) {
             HashMap<String, String> data = reportData.get(i);
             float egresos = safeParseFloat(data.get("egresos_cjdr"));
             float ingresos = safeParseFloat(data.get("ingresos_cjdr"));
-            float total = ingresos + egresos;
 
-            // Evitar NaN y Infinity
-            float porcentajeEgresos = total == 0 ? 0 : (egresos / total) * 100;
-            float porcentajeIngresos = total == 0 ? 0 : (ingresos / total) * 100;
-
-            entries.add(new BarEntry(i, new float[]{porcentajeIngresos, porcentajeEgresos}));
-            textViewsPorcentaje[i].setText(String.format("Egresos: %.0f, \n Ingresos: %.0f", egresos, ingresos));
-            textViewsNombre[i].setText(data.get("centro_cjdr"));
+            entries.add(new BarEntry(i, new float[]{ingresos, egresos}));
+            if (textViewsPorcentaje[i] != null) {
+                textViewsPorcentaje[i].setText(String.format("Egresos: %.0f\nIngresos: %.0f", egresos, ingresos));
+            }
+            if (textViewsNombre[i] != null) {
+                textViewsNombre[i].setText(data.get("centro_cjdr"));
+            }
         }
 
         ArrayList<Integer> colors = new ArrayList<>();
         colors.add(ContextCompat.getColor(this, R.color.Pronacej2));
         colors.add(ContextCompat.getColor(this, R.color.Pronacej1));
 
-        // Crear el conjunto de datos para el gráfico de barras
         BarDataSet dataSet = new BarDataSet(entries, "");
         dataSet.setColors(colors);
         dataSet.setValueTextSize(12f);
         dataSet.setValueTextColor(ContextCompat.getColor(this, R.color.black));
         dataSet.setStackLabels(new String[]{"Ingresos", "Egresos"});
 
-        // Asigna el ValueFormatter al dataSet para mostrar porcentajes
         dataSet.setValueFormatter(new ValueFormatter() {
             @Override
             public String getFormattedValue(float value) {
-                return String.format("%.1f%%", value); // Mostrar porcentajes en las barras
+                return String.format("%.0f", value);
             }
         });
 
-        // Crear los datos del gráfico de barras
         BarData barData = new BarData(dataSet);
 
-        // Configurar la leyenda
         barChart.getLegend().setEnabled(true);
         barChart.getLegend().setTextSize(8f);
-
-        // Configurar descripción del gráfico
         barChart.getDescription().setEnabled(false);
+        barChart.setExtraLeftOffset(10f);
+        barChart.setExtraRightOffset(50f);
 
-        // Añadir margen adicional a la izquierda y derecha del gráfico
-        barChart.setExtraLeftOffset(10f); // Ajusta el valor según sea necesario
-        barChart.setExtraRightOffset(50f); // Añadir margen derecho
-
-        // Configurar el eje X
         XAxis xAxis = barChart.getXAxis();
         xAxis.setValueFormatter(new ValueFormatter() {
             @Override
@@ -169,7 +166,7 @@ public class ResultadosEstadoCjrd extends AppCompatActivity {
         xAxis.setGranularity(1f);
         xAxis.setGranularityEnabled(true);
         xAxis.setLabelCount(reportData.size());
-        xAxis.setLabelRotationAngle(0);  // Cambia el ángulo de rotación a 0 para que las etiquetas estén en horizontal
+        xAxis.setLabelRotationAngle(0);
 
         YAxis yAxisLeft = barChart.getAxisLeft();
         yAxisLeft.setGranularity(1f);
@@ -178,9 +175,8 @@ public class ResultadosEstadoCjrd extends AppCompatActivity {
         YAxis yAxisRight = barChart.getAxisRight();
         yAxisRight.setEnabled(false);
 
-        // Establecer los datos en el gráfico y refrescar
         barChart.setData(barData);
-        barChart.invalidate(); // refrescar
+        barChart.invalidate();
     }
 
     private float safeParseFloat(String value) {

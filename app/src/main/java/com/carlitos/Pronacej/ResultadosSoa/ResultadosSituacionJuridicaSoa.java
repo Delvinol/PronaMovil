@@ -150,15 +150,15 @@ public class ResultadosSituacionJuridicaSoa extends AppCompatActivity {
         }
 
         ArrayList<Integer> colors = new ArrayList<>();
-        colors.add(ContextCompat.getColor(this, R.color.Pronacej10));
         colors.add(ContextCompat.getColor(this, R.color.Pronacej9));
+        colors.add(ContextCompat.getColor(this, R.color.Pronacej10));
 
         // Crear los conjuntos de datos para el gráfico de barras
         BarDataSet dataSet = new BarDataSet(entries, "");
         dataSet.setColors(getColors()); // Colores para cada conjunto de barras
         dataSet.setValueTextSize(12f);
         dataSet.setValueTextColor(ContextCompat.getColor(this, R.color.black));
-        dataSet.setStackLabels(new String[]{"Varones", "Mujeres"}); // Etiquetas para las partes apiladas
+        dataSet.setStackLabels(new String[]{"Mujeres", "Varones"}); // Etiquetas para las partes apiladas
 
         // Asigna el ValueFormatter al dataSet para mostrar porcentajes
         dataSet.setValueFormatter(new ValueFormatter() {

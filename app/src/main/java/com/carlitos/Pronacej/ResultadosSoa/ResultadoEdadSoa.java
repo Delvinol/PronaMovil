@@ -31,6 +31,7 @@ public class ResultadoEdadSoa extends AppCompatActivity {
 
     private TextView[] textViewsPorcentaje = new TextView[8];
     private TextView[] textViewsNombre = new TextView[8];
+    private TextView textViewTotalCantidad;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,6 +79,9 @@ public class ResultadoEdadSoa extends AppCompatActivity {
         textViewsNombre[6] = findViewById(R.id.textViewVeinte);
         textViewsNombre[7] = findViewById(R.id.textViewVeintiuno);
 
+        // Referencia al TextView del total de cantidad
+        textViewTotalCantidad = findViewById(R.id.textViewTotalCantidad);
+
         // Obtener los datos pasados desde la actividad anterior
         String datosJson = getIntent().getStringExtra("datosEdad");
         if (datosJson != null) {
@@ -110,6 +114,8 @@ public class ResultadoEdadSoa extends AppCompatActivity {
                 total += datos.getDouble(key);
             }
         }
+
+        textViewTotalCantidad.setText(String.format("Total: %d", Math.round(total)));
 
         // Mapeo de datos a valores de entrada
         int i = 0;

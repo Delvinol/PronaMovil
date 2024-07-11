@@ -24,6 +24,8 @@ public class ResultadoAdnCjdr extends AppCompatActivity {
     private int adn_si;
     private int adn_no;
 
+    private TextView textViewTotalCantidad;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -49,9 +51,12 @@ public class ResultadoAdnCjdr extends AppCompatActivity {
         // Obtener los datos de la actividad anterior
         adn_si = getIntent().getIntExtra("adn_si", 0);
         adn_no = getIntent().getIntExtra("adn_no", 0);
+        // Referencia al TextView del total de cantidad
+        textViewTotalCantidad = findViewById(R.id.textViewTotalCantidad);
 
         // Calcular el total
         int total = adn_si + adn_no;
+        textViewTotalCantidad.setText(String.format("Total: %d", Math.round(total)));
 
         // Calcular los porcentajes
         double por_si = (total != 0) ? (adn_si * 100.0 / total) : 0;

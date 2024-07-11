@@ -31,6 +31,8 @@ public class ResultadoEdadCjdr extends AppCompatActivity {
     private HorizontalBarChart barChart;
     private TextView[] textViewsPorcentaje = new TextView[8];
     private TextView[] textViewsNombre = new TextView[8];
+    private TextView textViewTotalCantidad;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,6 +81,8 @@ public class ResultadoEdadCjdr extends AppCompatActivity {
             textViewsPorcentaje[i] = findViewById(porcentajeIds[i]);
             textViewsNombre[i] = findViewById(nombreIds[i]);
         }
+
+        textViewTotalCantidad = findViewById(R.id.textViewTotalCantidad);
     }
 
     private void crearGrafico(JSONObject datos) throws JSONException {
@@ -115,7 +119,7 @@ public class ResultadoEdadCjdr extends AppCompatActivity {
                 i++;
             }
         }
-
+        textViewTotalCantidad.setText(String.format("Total: %d", Math.round(total)));
         setupBarChart(entries, labels);
     }
 

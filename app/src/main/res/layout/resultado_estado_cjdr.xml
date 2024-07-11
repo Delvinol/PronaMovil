@@ -127,6 +127,58 @@
             app:layout_constraintTop_toBottomOf="@+id/barChart"
             tools:ignore="MissingConstraints">
 
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginStart="16sp"
+                android:layout_marginEnd="16sp"
+                android:layout_marginRight="0sp"
+                android:layout_marginBottom="10sp"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/textViewTotalCantidad1"
+                    android:layout_width="90dp"
+                    android:layout_height="40dp"
+                    android:background="@drawable/btn_bkg_2"
+                    android:gravity="center"
+                    android:textColor="@color/white"
+                    android:textSize="17sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/textViewTotal1"
+                    android:layout_width="90dp"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/bkg_btn_2"
+                    android:gravity="center|left"
+                    android:paddingStart="15sp"
+                    android:paddingEnd="10sp"
+                    android:text="   Total \nIngresos" />
+
+                <TextView
+                    android:id="@+id/textViewTotalCantidad2"
+                    android:layout_width="90dp"
+                    android:layout_height="40dp"
+                    android:background="@drawable/btn_bkg_1"
+                    android:gravity="center"
+                    android:textColor="@color/white"
+                    android:textSize="17sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/textViewTotal2"
+                    android:layout_width="90dp"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/bkg_btn_1"
+                    android:gravity="center|left"
+                    android:paddingStart="15sp"
+                    android:paddingEnd="10sp"
+                    android:text="   Total \nEgresos" />
+            </LinearLayout>
+
             <com.github.mikephil.charting.charts.HorizontalBarChart
                 android:id="@+id/barChart"
                 android:layout_width="match_parent"
@@ -150,12 +202,12 @@
 
                 <TextView
                     android:id="@+id/textViewAlfonsoUgartePorcentaje"
-                    android:layout_width="100dp"
-                    android:layout_height="55dp"
+                    android:layout_width="150dp"
+                    android:layout_height="65dp"
                     android:background="@drawable/btn_bkg_1"
                     android:gravity="center"
                     android:textColor="@color/white"
-                    android:textSize="10sp"
+                    android:textSize="15sp"
                     android:textStyle="bold" />
 
                 <TextView
@@ -182,12 +234,12 @@
 
                 <TextView
                     android:id="@+id/textViewMarcavallePorcentaje"
-                    android:layout_width="100dp"
-                    android:layout_height="55dp"
+                    android:layout_width="150dp"
+                    android:layout_height="65dp"
                     android:background="@drawable/btn_bkg_2"
                     android:gravity="center"
                     android:textColor="@color/white"
-                    android:textSize="10sp"
+                    android:textSize="15sp"
                     android:textStyle="bold" />
 
                 <TextView
@@ -214,12 +266,12 @@
 
                 <TextView
                     android:id="@+id/textViewPucallpaPorcentaje"
-                    android:layout_width="100dp"
-                    android:layout_height="55dp"
+                    android:layout_width="150dp"
+                    android:layout_height="65dp"
                     android:background="@drawable/btn_bkg_3"
                     android:gravity="center"
                     android:textColor="@color/white"
-                    android:textSize="10sp"
+                    android:textSize="15sp"
                     android:textStyle="bold" />
 
                 <TextView
@@ -246,12 +298,12 @@
 
                 <TextView
                     android:id="@+id/textViewEl_TamboPorcentaje"
-                    android:layout_width="100dp"
-                    android:layout_height="55dp"
+                    android:layout_width="150dp"
+                    android:layout_height="65dp"
                     android:background="@drawable/btn_bkg_4"
                     android:gravity="center"
                     android:textColor="@color/white"
-                    android:textSize="10sp"
+                    android:textSize="15sp"
                     android:textStyle="bold" />
 
                 <TextView
@@ -278,12 +330,12 @@
 
                 <TextView
                     android:id="@+id/textViewTrujilloPorcentaje"
-                    android:layout_width="100dp"
-                    android:layout_height="55dp"
+                    android:layout_width="150dp"
+                    android:layout_height="65dp"
                     android:background="@drawable/btn_bkg_5"
                     android:gravity="center"
                     android:textColor="@color/white"
-                    android:textSize="10sp"
+                    android:textSize="15sp"
                     android:textStyle="bold" />
 
                 <TextView
@@ -310,12 +362,12 @@
 
                 <TextView
                     android:id="@+id/textViewJose_QuinonesPorcentaje"
-                    android:layout_width="100dp"
-                    android:layout_height="55dp"
+                    android:layout_width="150dp"
+                    android:layout_height="65dp"
                     android:background="@drawable/btn_bkg_6"
                     android:gravity="center"
                     android:textColor="@color/white"
-                    android:textSize="10sp"
+                    android:textSize="15sp"
                     android:textStyle="bold" />
 
                 <TextView
@@ -342,12 +394,12 @@
 
                 <TextView
                     android:id="@+id/textViewMiguel_GrauPorcentaje"
-                    android:layout_width="100dp"
-                    android:layout_height="55dp"
+                    android:layout_width="150dp"
+                    android:layout_height="65dp"
                     android:background="@drawable/btn_bkg_7"
                     android:gravity="center"
                     android:textColor="@color/white"
-                    android:textSize="10sp"
+                    android:textSize="15sp"
                     android:textStyle="bold" />
 
                 <TextView
@@ -384,12 +436,12 @@
 
                 <TextView
                     android:id="@+id/textViewSanta_MargaritaPorcentaje"
-                    android:layout_width="100dp"
-                    android:layout_height="55dp"
+                    android:layout_width="150dp"
+                    android:layout_height="65dp"
                     android:background="@drawable/btn_bkg_8"
                     android:gravity="center"
                     android:textColor="@color/white"
-                    android:textSize="10sp"
+                    android:textSize="15sp"
                     android:textStyle="bold" />
 
                 <TextView
@@ -416,12 +468,12 @@
 
                 <TextView
                     android:id="@+id/textViewAnexoIIIPorcentaje"
-                    android:layout_width="100dp"
-                    android:layout_height="55dp"
+                    android:layout_width="150dp"
+                    android:layout_height="65dp"
                     android:background="@drawable/btn_bkg_9"
                     android:gravity="center"
                     android:textColor="@color/white"
-                    android:textSize="10sp"
+                    android:textSize="15sp"
                     android:textStyle="bold" />
 
                 <TextView
@@ -448,12 +500,12 @@
 
                 <TextView
                     android:id="@+id/textViewLimaPorcentaje"
-                    android:layout_width="100dp"
-                    android:layout_height="55dp"
+                    android:layout_width="150dp"
+                    android:layout_height="65dp"
                     android:background="@drawable/btn_bkg_10"
                     android:gravity="center"
                     android:textColor="@color/white"
-                    android:textSize="10sp"
+                    android:textSize="15sp"
                     android:textStyle="bold" />
 
                 <TextView

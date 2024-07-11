@@ -24,6 +24,7 @@ public class ResultadosSaludMentalCjdr extends AppCompatActivity {
 
     private int salud_si;
     private int salud_no;
+    private TextView textViewTotalCantidad;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -51,9 +52,11 @@ public class ResultadosSaludMentalCjdr extends AppCompatActivity {
         // Obtener los valores de salud mental desde el intent
         salud_si = getIntent().getIntExtra("salud_si", 0);
         salud_no = getIntent().getIntExtra("salud_no", 0);
+        // Referencia al TextView del total de cantidad
+        textViewTotalCantidad = findViewById(R.id.textViewTotalCantidad);
 
         int totalSalud = salud_no + salud_si;
-
+        textViewTotalCantidad.setText(String.format("Total: %d", Math.round(totalSalud)));
         // Calcular los porcentajes
         double porcentajesalud_si = (double) salud_si / totalSalud * 100;
         double porcentajesalud_no = (double) salud_no / totalSalud * 100;

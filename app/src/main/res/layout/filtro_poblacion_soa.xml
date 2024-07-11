@@ -100,17 +100,17 @@
             android:layout_marginBottom="12sp">
 
             <Button
-                android:id="@+id/etFechaInicio"
+                android:id="@+id/btnMonthYearPicker"
                 style="?android:spinnerStyle"
                 android:layout_width="250dp"
                 android:layout_height="wrap_content"
                 android:background="@drawable/round_border"
                 android:drawableEnd="@drawable/baseline_date_range_24"
                 android:drawableTint="@color/bluePronacej"
-                android:onClick="openDatePickerInicio"
+                android:onClick="openMonthYearPicker"
                 android:paddingStart="16sp"
                 android:paddingEnd="16sp"
-                android:text="01 ENE 2024"
+                android:text="ENE 2024"
                 android:textColor="@color/black"
                 android:textSize="21sp"
                 app:layout_constraintEnd_toStartOf="@+id/btnEnviar"
@@ -135,15 +135,14 @@
             android:id="@+id/cbIncluirEstadoIng"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Incluir solo Estado ING" />
-
+            android:text="ACTIVOS: Adolescentes que están siendo atendidos" />
 
         <CheckBox
             android:id="@+id/cbIncluirEstadoAten"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:checked="true"
-            android:text="Incluir atendidos" />
+            android:text="ATENDIDOS: Población acumulada en un periodo" />
 
 
     </LinearLayout>

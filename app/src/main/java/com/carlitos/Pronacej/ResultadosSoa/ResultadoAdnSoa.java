@@ -23,6 +23,7 @@ public class ResultadoAdnSoa extends AppCompatActivity {
 
     private int adn_si;
     private int adn_no;
+    private TextView textViewTotalCantidad;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -50,9 +51,12 @@ public class ResultadoAdnSoa extends AppCompatActivity {
         adn_si = getIntent().getIntExtra("adn_si", 0);
         adn_no = getIntent().getIntExtra("adn_no", 0);
 
+        // Referencia al TextView del total de cantidad
+        textViewTotalCantidad = findViewById(R.id.textViewTotalCantidad);
+
         // Calcular el total
         int total = adn_si + adn_no;
-
+        textViewTotalCantidad.setText(String.format("Total: %d", Math.round(total)));
         // Calcular los porcentajes
         double por_si = (total != 0) ? (adn_si * 100.0 / total) : 0;
         double por_no = (total != 0) ? (adn_no * 100.0 / total) : 0;

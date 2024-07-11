@@ -1,6 +1,5 @@
 package com.carlitos.Pronacej.FiltrosSoa;
 
-import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
@@ -8,7 +7,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.DatePicker;
-import android.widget.EditText;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
@@ -17,9 +15,11 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.carlitos.Pronacej.ActivitysPadres.CategoriaMenu;
 import com.carlitos.Pronacej.R;
 import com.carlitos.Pronacej.ResultadosSoa.ResultadoCentroEducativoSoa;
+import com.carlitos.Pronacej.Time.MonthYearPickerDialog;
 import com.carlitos.Pronacej.Utils.Apis;
 import com.carlitos.Pronacej.Utils.SoaService;
 
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
@@ -46,67 +46,48 @@ public class FiltroEducativaSoa extends AppCompatActivity {
     private int instituto;
     private int universidad;
     private int ninguno;
-    private EditText etFechaInicio;
     private TextView tvErrorFecha;
     private Button btnGenerarGrafico;
-
+    private Button btnMonthYearPicker;
     private SoaService soaService;
-    private DatePickerDialog datePickerDialog;
-    private Button dateButton;
-    private String selectedDate;
     private CheckBox cbIncluirEstadoIng;
     private CheckBox cbIncluirEstadoAten;
-
-
+    private int selectedYear, selectedMonth;
+    private Calendar calendar;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.filtro_educativa_soa);
 
-        initDatePicker();
-        dateButton = findViewById(R.id.etFechaInicio);
-        selectedDate = getTodaysDate();
-        dateButton.setText(selectedDate);
-        tvErrorFecha = findViewById(R.id.tvErrorFecha);
-        btnGenerarGrafico = findViewById(R.id.btnEnviar);
-        soaService = Apis.getSoaService();
+        btnMonthYearPicker = findViewById(R.id.btnMonthYearPicker);
+        calendar = Calendar.getInstance();
+        selectedYear = calendar.get(Calendar.YEAR);
+        selectedMonth = calendar.get(Calendar.MONTH);
+        updateDateButtonText();
+
         cbIncluirEstadoIng = findViewById(R.id.cbIncluirEstadoIng);
         cbIncluirEstadoAten = findViewById(R.id.cbIncluirEstadoAten);
 
+        tvErrorFecha = findViewById(R.id.tvErrorFecha);
+        btnGenerarGrafico = findViewById(R.id.btnEnviar);
+        soaService = Apis.getSoaService();
 
         btnGenerarGrafico.setOnClickListener(view -> {
-            showSelectedDate(etFechaInicio);
-
-            String fechaInicio = showSelectedDate(etFechaInicio).toString().trim();
-            boolean incluirEstadoIng = cbIncluirEstadoIng.isChecked();
-
-            if (validarFechaFormato(fechaInicio)) {
-                tvErrorFecha.setVisibility(View.GONE);
-                llamarEndPoint(fechaInicio, incluirEstadoIng);
-            } else {
-                tvErrorFecha.setVisibility(View.VISIBLE);
-            }
+            llamarEndPoint();
         });
+
         setupCheckBoxListeners();
+
         Button ButtonBack = findViewById(R.id.buttonBack);
         Button ButtonHome = findViewById(R.id.buttonHome);
 
-        ButtonHome.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intentHome = new Intent(FiltroEducativaSoa.this, CategoriaMenu.class);
-                startActivity(intentHome);
-            }
-
-        });
-        ButtonBack.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onBackPressed(); // Llamar al método onBackPressed para ir atrás
-            }
+        ButtonHome.setOnClickListener(v -> {
+            Intent intentHome = new Intent(FiltroEducativaSoa.this, CategoriaMenu.class);
+            startActivity(intentHome);
         });
 
+        ButtonBack.setOnClickListener(v -> onBackPressed());
     }
 
     private void setupCheckBoxListeners() {
@@ -122,13 +103,17 @@ public class FiltroEducativaSoa extends AppCompatActivity {
             }
         });
     }
-    private boolean validarFechaFormato(String fecha) {
-        String pattern = "^\\d{4}-\\d{2}-\\d{2}$";
-        return fecha.matches(pattern);
-    }
 
-    private void llamarEndPoint(String fechaInicio, boolean incluirEstadoIng) {
-        Call<List<Map<String, Object>>> call = soaService.obtenerIE(fechaInicio, fechaInicio, incluirEstadoIng);
+    private void llamarEndPoint() {
+        calendar.set(selectedYear, selectedMonth, 1);
+        String fechaInicio = new SimpleDateFormat("yyyy-MM-dd", Locale.US).format(calendar.getTime());
+
+        calendar.set(selectedYear, selectedMonth, calendar.getActualMaximum(Calendar.DAY_OF_MONTH));
+        String fechaFin = new SimpleDateFormat("yyyy-MM-dd", Locale.US).format(calendar.getTime());
+
+        boolean incluirEstadoIng = cbIncluirEstadoIng.isChecked();
+
+        Call<List<Map<String, Object>>> call = soaService.obtenerIE(fechaInicio, fechaFin, incluirEstadoIng);
         call.enqueue(new Callback<List<Map<String, Object>>>() {
             @Override
             public void onResponse(Call<List<Map<String, Object>>> call, Response<List<Map<String, Object>>> response) {
@@ -197,98 +182,24 @@ public class FiltroEducativaSoa extends AppCompatActivity {
         }
     }
 
-
-    private void initDatePicker() {
-        // Establece el Locale a español
-        Locale locale = new Locale("es", "ES");
-        Locale.setDefault(locale);
-
-        DatePickerDialog.OnDateSetListener dateSetListener = new DatePickerDialog.OnDateSetListener() {
+    public void openMonthYearPicker(View view) {
+        MonthYearPickerDialog pd = new MonthYearPickerDialog();
+        pd.setListener(new DatePickerDialog.OnDateSetListener() {
             @Override
-            public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-                month = month + 1;
-                selectedDate = makeDateString(dayOfMonth, month, year);
-                dateButton.setText(selectedDate);
+            public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+                selectedYear = year;
+                selectedMonth = monthOfYear;
+                updateDateButtonText();
             }
-        };
-
-        Calendar cal = Calendar.getInstance();
-        int year = cal.get(Calendar.YEAR);
-        int month = cal.get(Calendar.MONTH);
-        int dayOfMonth = cal.get(Calendar.DAY_OF_MONTH);
-
-        int style = AlertDialog.THEME_HOLO_LIGHT;
-
-        datePickerDialog = new DatePickerDialog(this, style, dateSetListener, year, month, dayOfMonth);
-        datePickerDialog.getDatePicker().setMaxDate(System.currentTimeMillis());
-    }
-    private String makeDateString(int dayOfMonth, int month, int year) {
-        return getMonthFormat(month) + " " + dayOfMonth + " " + year;
-    }
-    private String getMonthFormat(int month) {
-        if (month == 1) return "ENE";
-        if (month == 2) return "FEB";
-        if (month == 3) return "MAR";
-        if (month == 4) return "ABR";
-        if (month == 5) return "MAY";
-        if (month == 6) return "JUN";
-        if (month == 7) return "JUL";
-        if (month == 8) return "AGO";
-        if (month == 9) return "SEP";
-        if (month == 10) return "OCT";
-        if (month == 11) return "NOV";
-        if (month == 12) return "DIC";
-        return "ENE";
-    }
-    private String formatDateToYMD(int year, int month, int dayOfMonth) {
-        return String.format("%04d-%02d-%02d", year, month, dayOfMonth);
+        });
+        pd.show(getSupportFragmentManager(), "MonthYearPickerDialog");
     }
 
-    public void openDatePicker(View view) {
-        datePickerDialog.show();
-    }
-    public void openDatePickerInicio(View view) {
-        datePickerDialog.show();
-    }
-
-
-    public String showSelectedDate(View view) {
-        String[] dateParts = selectedDate.split(" ");
-        int day = Integer.parseInt(dateParts[1]);
-        int month = getMonthNumber(dateParts[0]);
-        int year = Integer.parseInt(dateParts[2]);
-        String formattedDate = formatDateToYMD(year, month, day);
-
-        String formato;
-        formato = formattedDate;
-        return formattedDate;
-
-    }
-
-
-    private int getMonthNumber(String month) {
-        switch (month) {
-            case "ENE": return 1;
-            case "FEB": return 2;
-            case "MAR": return 3;
-            case "ABR": return 4;
-            case "MAY": return 5;
-            case "JUN": return 6;
-            case "JUL": return 7;
-            case "AGO": return 8;
-            case "SEP": return 9;
-            case "OCT": return 10;
-            case "NOV": return 11;
-            case "DIC": return 12;
-            default: return 1;
-        }
-    }
-    private String getTodaysDate() {
-        Calendar cal = Calendar.getInstance();
-        int year = cal.get(Calendar.YEAR);
-        int month = cal.get(Calendar.MONTH);
-        month = month + 1;
-        int dayOfMonth = cal.get(Calendar.DAY_OF_MONTH);
-        return makeDateString(dayOfMonth, month, year);
+    private void updateDateButtonText() {
+        calendar.set(Calendar.YEAR, selectedYear);
+        calendar.set(Calendar.MONTH, selectedMonth);
+        String monthYearStr = new SimpleDateFormat("MMM yyyy", new Locale("es", "ES"))
+                .format(calendar.getTime());
+        btnMonthYearPicker.setText(monthYearStr.toUpperCase());
     }
 }
